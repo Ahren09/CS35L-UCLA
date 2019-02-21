@@ -1,0 +1,183 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw17280\paperh25920\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f0\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 1. tar command \
+	save multiple files into a archive or restore files from the archive\
+	\
+	Important options:\
+	\
+	-c: save multiple files into a archive\
+	-x: restore files from the archive\
+	-f: specify the archive file. \
+		The newly created archive file when used with -c, \
+		or the target archive to unzip when used with -x\
+	-j: zip/unzip with the bzip2 algorithm\
+	-z: zip/unzip with the gzip algorithm\
+	-v: visual mode, prints out the progress\
+\
+	Usage: save multiple files into a archive\
+	tar -czf archive file1 file2 file3 ...\
+		\
+	Examples:\
+		tar -czf IO.tar IO IO.cpp output\
+		\
+		tar -czvf IO.tar.gz IO IO.cpp output \
+		#add -v to show the progress \
+		\
+		tar -cjvf IO.tar.bz IO IO.cpp output \
+		#add -j to compress with the bzip2 	algorithm \
+\
+	Usage: restore files from the archive. \
+	tar -xzf archive\
+\
+	Examples:\
+		tar -xzf IO.tar	\
+		tar -xzvf IO.tar.gz  \
+		#add -v to show the progress \
+		tar -xjvf IO.tar.bz 	\
+		#add -j to untar archive compressed with the bzip2 algorithm \
+		\
+3. Install software from package management tool\
+\
+	Normal way for Linux User to install new software. \
+	\
+	Package management software: \
+		software that helps manage installed software\
+\
+	Ubuntu: apt\
+	CentOS: yum\
+	MacOS: brew\
+	\
+	yum example \
+\
+	yum install emacs #Install emacs\
+	yum remove emacs #Remove emacs \
+	yum search "emacs" #Search all the package with name emacs. \
+\
+4. Install program from the source code\
+	./configure \
+	#check whether the system contains the required library, \
+	header file, program to compile and run the program. \
+	\
+	./configure --help \
+	#provides all the options you can specify to configure. \
+	\
+	./configure --prefix=MYPATH\
+	#Tell make install to move the binary into the MYPATH instead of \\\
+	#default linux position\
+\
+	make #compile the source code into binary\
+	make install #move the binary to desried place under file system\
+\
+	make uninstall #remove the installation  \
+				   #undo make install\
+				   \
+	make clean	#remove the compiled binary\
+				#undo make\
+	make distclean	#totally remove any generated files. \
+					# undo make and undo congiure\
+					\
+5.  Linux File Permission:\
+\
+	user and user group\
+\
+	1. users belong to user groups. \
+	2. One user can belong to multiple groups\
+\
+	Check which group you are in, use groups command. \
+\
+	In Linux, each file belongs to a user (owner) and a group. \
+	The file permission of the file specifies\
+	what the user(u), users belong to the group(g), \
+	and other users(o) can do with the file. \
+\
+	To see the permission of the file, use ls -l. \
+	For example: ls -l ~/fin_client.c\
+\
+	We can see a file named fin_client.c and the following \
+	is its info:\
+	\
+	-rwxrw-r-- zhou csgrad 4390 Aug 15  21:09 fin_client.c\
+\
+	fin_client belongs to user zhou and group csgrad. \
+	The permission for the user is rwx, \
+	for the group is rw, \
+	for the others are r.\
+\
+6.	chmod command can be used to change the permission of a file:\
+\
+	usage:\
+		chmod new_permission path_to_file:\
+		new permission is in the format of: u/g/o +/-/= r/w/x\
+		e.g. \
+		\
+		chmod o+wx fin_client.c \
+		#add wx permission of the other to fin_client.c \
+		\
+		chmod g-w fin_client.c \
+		#remove the w permission of the group from fin_client.c \
+		\
+		chmod u=rx fin_client.c \
+		#change the permission of the owner to rx regardless its \
+		previous permission. \
+		\
+7. History Command \
+\
+	history command stores the recent executed commands. \
+	\
+	history | less \
+	# less is also a text editor. \
+	# In fact, the man page is displayed with less. \
+	# So you can navigate/search in less the same way as man page. \
+\
+	Press up/down cursor keys in bash \
+	allows you to access commands stored in history\
+\
+	!number: redo the commands in history with number\
+\
+	Example: !121\
+\
+	!string: redo the most recent command in history \
+	which starts with the string\
+\
+	Example: !fin\
+\
+8. Middle button of the mouse can be used to \
+	paste a highlighted string in bash. \
+	\
+9. Root User\
+	Root User is the "God" in Linux. \
+	Normally owned by the administrator of the system. \
+	It can access files without the restriction of the File Permission. \
+	Certain commands can only be executed by the Root User.\
+	\
+10. alias and unalias command:\
+\
+	Define new short cuts in bash\
+	e.g.: alias sshlnx='ssh zhou@lnxsrv09.seas.ucla.edu'	\
+	Then execute sshlnx is equivalent to ssh zhou@lnxsrv09.seas.ucla.edu'\
+\
+	Just type alias in terminal will show all the alias for the current\
+	terminal\
+\
+	unalias command will remove the alias. \
+	e.g.: unalias sshlnx\
+\
+11. ~/.bashrc and ~/.bash_profile:\
+	\
+	Two bash scripts under your home directory\
+	\
+	Every time you open the terminal, the commands in one of the file \
+	will be executed. \
+	\
+	.bash_profile: executed when you log in locally or remotely via ssh\
+	.bashrc: executed when you open a terminal or invoke /bin/bash \
+	\
+	Add customized environmental variable, alias to these two files. \
+}

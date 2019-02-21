@@ -1,0 +1,99 @@
+1. Makefile syntax:
+	A single Makefile is built with multiple rules
+	
+	syntax for each rule:
+	
+	target: prerequisites
+	[tab]	bash_command
+	[tab] 	bash_command 
+
+	The bash_command under one rule will only execute if
+	(1) target does not exist
+	(2) modification time of prerequisites are newer than the target. 
+	
+2. Sample Makefile: compile bar.c foo.c to hello program 
+
+	hello: bar.o foo.o
+        gcc -o hello bar.o foo.o
+
+	bar.o: bar.c bar.h
+        gcc -c bar.c 
+
+	foo.o: foo.c
+		gcc -c foo.c
+		
+	if the prerequisites are rules specified in the makefile, 
+	make will recursively execute the prerequisited rules first. 
+	
+	When finish executing all the prerequisited rules, make will come back 
+	to the current rule to find whether it needs to execute the bahs command 
+	based on the rules mentioned above. 
+		
+3.	make command
+
+	A. make will look for a file named [Mm]akefile under the current 
+	directory and execute based on that file. 
+	
+	B. To let make execute based on files that are not named as [Mm]akefile 
+	or [Mm]akefile not under current directory, use the -f option
+	
+	e.g 
+	
+	make -f /var/tmp/makefile
+	make -f myMakefile
+
+	C. make will only execute the *first* rule it encounter in Makefile
+
+	hello: bar.c foo.c
+        echo "Start to compile!"
+        gcc -o hello bar.c foo.c
+
+	hello-static: bar.c foo.c        
+		echo "Start to compile and link statically!"
+        gcc -o hello bar.c foo.c --static
+
+	Type make, it will execute based on hello rule. 
+	
+	To let make execute on other rules do make rule_name
+	e.g. 
+	make hello-static
+	
+4. phony targets
+
+	Targets that do not specify an actual file but simply served as a target 
+	name 
+	
+	Commands under phony targets will always got executed when the target got 
+	invoked. 
+	
+	e.g. 
+	
+	.PHONY: clean
+	clean:
+		rm -rf hello
+		rm *.o
+
+5. Variables in Makefile 
+	
+	A. Declare a variable: var_name = value
+	B. Use the value of a variable: $(var_name)
+	C. Similar to bash, only variable types in Makefile are string
+
+	e.g. 
+	
+	OBJECTS = bar.o foo.o
+	CFLAGS = -g -O0
+	CC = gcc 
+	hello: $(OBJECTS)
+		$(CC) -o hello $(OBJECTS)
+
+	bar.o: bar.c bar.h
+		$(CC) -c $(CFLAGS) bar.c 
+
+	foo.o: foo.c
+		$(CC) -c $(CFLAGS) foo.c
+
+	.PHONY: clean
+	clean:
+		rm -rf hello 
+		rm -rf $(OBJECTS)

@@ -1,0 +1,177 @@
+
+1.
+First I downloaded the files:
+wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/coreutils-with-bug.tar.gz
+
+Then unzip the file by:
+tar -xzvf coreutils-with-bug.tar.gz
+
+
+2.
+I use the following command to try to install the software：
+./configure --prefix=/u/cs/ugrad/yiqiao/Lab4/coreutils/coreutils-install
+
+make 
+
+
+It generates the error message:
+In file included from utimecmp.c:41:0:
+utimens.h:2:5: error: conflicting types for 'futimens'
+ int futimens (int, char const *, struct timespec const [2]);
+In file included from utimecmp.h:25:0,
+                 from utimecmp.c:25:
+/usr/include/sys/stat.h:373:12: note: previous declaration of 'futimens' was here
+ extern int futimens (int __fd, const struct timespec __times[2]) __THROW;
+
+3.
+I download the patch file into current directory and patch the package:
+
+wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/coreutils.diff
+patch -p0<coreutils.diff
+
+Then I run:
+
+make
+make install
+
+After successfully applying the patch, there is no longer any error messages this time.
+
+4.
+Running with ls command of the system
+$ tmp=$(mktemp -d)
+$ cd $tmp
+$ touch -d '1918-11-11 11:00 GMT' wwi-armistice
+$ touch now
+$ sleep 1
+$ touch now1
+$ TZ=UTC0 ls -lt --full-time wwi-armistice now now1
+
+After running the command, I get the output:
+
+-rw-r--r-- 1 yiqiao csugrad 0 2019-01-31 03:45:31.476908382 +0000 now1
+-rw-r--r-- 1 yiqiao csugrad 0 2019-01-31 03:45:21.902743179 +0000 now
+-rw-r--r-- 1 yiqiao csugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+I remove the temporary directory:
+
+$ cd
+$ rm -fr $tmp
+
+5.
+Reproducing the bug with coreutils
+
+TZ=UTC0 ~/Lab4/coreutils/coreutils-install/bin/ls -lt --full-time wwi-armistice now now1
+
+By running ls command of coreutils, I get the following message:
+-rw-r--r-- 1 yiqiao csugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 yiqiao csugrad 0 2019-01-31 03:59:25.373301765 +0000 now1
+-rw-r--r-- 1 yiqiao csugrad 0 2019-01-31 03:59:20.252213290 +0000 now
+
+Therefore, the dates of files are in wrong order for the ls command in coreutils we install. The least recent file "wwi-armistice" should have appeared at bottom of ls -lt. But it is positioned at the top
+
+5.
+gdb /u/cs/ugrad/yiqiao/Lab4/coreutils/coreutils-install/bin/ls
+I run gdb and look through "help" to learn the process of using gdb
+
+6.
+I change directory back to folder of source files
+
+gdb ./ls
+
+By running the ls.c file, I found that the "compare_mtime" function might cause relevant problems
+ 
+I set a breakpoint at this function:
+b compare_mtime
+
+By using the "step" command of gdb (which can be used by typing 's'), I step through each line of compare_mtime() 
+
+7.
+The result:
+
+(gdb) r -lt
+Starting program: /w/home.23/cs/ugrad/yiqiao/Lab4/coreutils/coreutils-with-bug/src/./ls -lt
+Breakpoint 1, compare_mtime (a=0x6170e0, b=0x617190) at ls.c:2884
+2884	static int compare_mtime (V a, V b) { return cmp_mtime (a, b, xstrcoll); }
+(gdb) s
+cmp_mtime (cmp=0x404340 <xstrcoll>, b=0x617190, a=0x6170e0) at ls.c:2884
+2884	static int compare_mtime (V a, V b) { return cmp_mtime (a, b, xstrcoll); }
+(gdb) s
+timespec_cmp (b=..., a=...) at ../lib/timespec.h:48
+48	  int diff = a.tv_sec - b.tv_sec;
+(gdb) s
+49	  return diff ? diff : a.tv_nsec - b.tv_nsec;
+
+I observe the function call to timespec_cmp()
+Through the list command, I closely examine the function:
+
+(gdb) list timespec_cmp
+
+43      /* Return negative, zero, positive if A < B, A == B, A > B, respectively.
+44         Assume the nanosecond components are in range, or close to it.  */
+45      static inline int
+46      timespec_cmp (struct timespec a, struct timespec b)
+47      {
+48        int diff = a.tv_sec - b.tv_sec;
+49        return diff ? diff : a.tv_nsec - b.tv_nsec;
+50      } 
+51        
+52      # if ! HAVE_DECL_NANOSLEEP
+
+This function potentially evokes overflow
+
+8.
+My next step is to find the function in the lib directory
+cd ~/Lab4/coreutils/coreutils-with-bug/lib
+ls|grep timespec
+
+The timespec.h file is found.
+
+I create a copy of the header file
+
+cp timespec.h timespec_patch.h
+
+Then I make the following edit
+
+timespec_cmp (struct timespec a, struct timespec b)
+{
+  if(a.tv_nsec==b.tv_nsec)
+    return 0;
+  return a.tv_nsec < b.tv_nsec ? -1:1;
+}
+
+9.
+After modifying the original code, I create the patch:
+diff -u timespec.h timespec_patch.h>lab4.diff
+
+To check whether the patch works, I move the file to my Lab4 directory and patch the ls.c file:
+
+patch -p0<~/Lab4/lab4.diff
+File to patch: ./lib/timespec.h
+patching file ./lib/timespec.h
+
+10.
+I reinstall coreutils in a new directory:
+
+mkdir coreutils-new
+cd coreutils-with-bug
+
+Then I reinstall coreutils in that new directory
+./configure --prefix=/u/cs/ugrad/yiqiao/Lab4/coreutils/coreutils-new
+make 
+make install
+
+To check whether ls command is successfully modified, I redo the former procedures and run the newly installed "ls" command
+~/Lab4/coreutils/coreutils-new/bin/ls -lt --full-time wwi-armistice now now1
+
+The program generates the following result
+
+-rw-r--r-- 1 yiqiao csugrad 0 2019-01-31 14:17:19.301042588 -0800 now1
+-rw-r--r-- 1 yiqiao csugrad 0 2019-01-31 14:17:10.294887783 -0800 now
+-rw-r--r-- 1 yiqiao csugrad 0 1918-11-11 03:00:00.000000000 -0800 wwi-armistice
+
+Now our ls command generates result in correct order.
+
+11.
+I create a GNU style of change logs in lab4.diff with the online tutorial of GNU
+
+2019-01-31 Yiqiao Jin <ahren2040@g.ucla.edu>
+* timespec.h(timespec_cmp):Change function to comparison of time to avoid integer overflow

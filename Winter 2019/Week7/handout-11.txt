@@ -1,0 +1,50 @@
+1. C program compilation process:
+
+	Pre-processing: 	expand macro, header files, delete comments
+						gcc -E outputs the results after preprocessing
+	
+	Compilation: 		convert the source code into a assembly code. 
+						gcc -S options converts the source code into a 
+						assembly code
+
+	Assembly: 			convert the assembly code into machine code. 
+						The file that contains the machine code is called as 
+						object files
+						
+						gcc -c option converts the source code file into 
+						object files
+			 			
+	Linking: 			combines all the object files + standard library to 
+						generate a single executable file.
+						
+					
+2.	Library
+
+	A file contains the implementation of commonly used routines. 
+	
+	Library is also generated from C source code using standard compilation 
+	process
+						
+3.	Methods to link libraries:
+
+	Static linking: 
+	
+	Copies the whole content of the library to the executable file. 
+	
+	gcc --static option links library statically
+	e.g.
+	gcc foo.c bar.c --static -o hello-static
+	
+	Dynamic linking: 
+	
+	Executable file contains the name of the library it requires
+	The library will be loaded into memory from disk upon invocation 
+	of the executable file. 
+
+4.	ldd command:
+	Output the dynamic library required by an executable file
+	
+	syntax: ldd path_to_exec_file
+
+	ldd /usr/bin/ls
+	ldd hello

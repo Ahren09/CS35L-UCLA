@@ -1,0 +1,143 @@
+﻿1. System Call vs Library Call
+
+	Library call:
+		Invoke functions provided by the standard library
+		e.g. call scanf/printf/malloc
+
+	System call:
+		Invoke functions by the operating system
+
+2. Open 
+
+	int open(const char *path, int oflags);
+	int open(const char *path, int oflags, mode_t mode);
+
+	Given  a  pathname  for  a  file, open() returns a file descriptor.
+	File Descriptor: a small, non-negative integer that represents a file. 
+	It is for use in subsequent system calls  (read/write etc.)
+
+	oflags: determine the method in which the file is to be opened.
+
+	O_RDONLY		Open the file so that it is read only.
+	O_WRONLY		Open the file so that it is write only.
+	O_CREAT			If the file does not exist, create it. 
+					If the O_CREAT option is used, 
+				then you must include the third parameter.
+
+				
+	mode: Only used when oflags is O_CREAT, specify the permission of the file 
+	if it is created. 
+
+	S_IRUSR			Set read rights for the owner to true.
+	S_IWUSR			Set write rights for the owner to true.
+	S_IXUSR			Set execution rights for the owner to true.
+	S_IRGRP			Set read rights for the group to true.
+	S_IWGRP			Set write rights for the group to true.
+	S_IXGRP			Set execution rights for the group to true.
+	S_IROTH			Set read rights for other users to true.
+	S_IWOTH			Set write rights for other users to true.
+	S_IXOTH			Set execution rights for other users to true.
+
+	examples of open:
+
+	open("/var/log/dmesg", O_RDONLY); 
+	//Open the /var/log/dmesg file for read
+
+	open("output", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR |  S_IRGRP );
+	//Open the output file for write. 
+	//If the output file does not exist, create it 
+	//and set its permission to Owner: read/write, group: read and others none. 
+
+3. Read 
+
+	ssize_t read(int fd, void *buf, size_t count);
+
+	read attempts to read up to count bytes from file descriptor fd 
+	into the buffer starting at buf.
+
+	On success, the number of bytes read is returned (zero indicates end of file), 
+	and the file position is advanced by this number.
+
+	On error, -1 is returned. 
+
+4. Write 
+
+	ssize_t write(int fd, const void *buf, size_t count);
+
+	write writes up to count bytes from the buffer pointed buf to the 
+	file referred to by the file descriptor fd.
+
+	On success, the number of bytes written is returned. 
+	On error, -1 is returned. 
+
+5. Close 
+	int close(int fd);
+
+	close the file descriptor 
+
+	return value: On succeed returns 0. 
+	On error returns -1.  
+
+
+6. Special files descriptor:
+	0:	stdin
+	1:	stdout
+	2:	stderr
+
+7. Library calls involved with hardware are implemented by syscalls.
+	cin/scanf: Implemented by the read(0, ... );
+	cout/printf: Implemented by the write(1, ..);
+	cin, cout, scanf, printf: nice interface wrapper functions
+
+8. strace command
+
+	Syntax: strace [options] command [arguments...]
+	
+	The strace command runs the specified program command with the given arguments. 
+	When the execution stops, strace command reports the syscalls issued by the given commands.
+
+	e.g.：
+		strace ls
+		strace ./write
+	
+9. Getting help for system calls
+
+	Man page contains entries for system calls. 
+
+	Man page have several sections, each section may 
+	have entries with the same name:
+
+	whatis read
+	read                 (1p)  - read a line from standard input
+	read                 (2)  - read from a file descriptor
+
+	(1p) here means the read command in section 1p, 
+	(2) here means the read command in section 2. 
+
+	To access the corresponding entries, use:
+	man section command
+
+	e.g. 
+	man 1p read
+	man 2 read
+
+10. time command:
+
+	syntax:  time [options] command [arguments...]
+
+	The time command runs the specified program command with the given arguments. 
+	When the execution stops, time command reports the time usage of the given 
+	commands.
+
+	e.g. time ls /usr/bin/
+		real	0m0.005s
+		user	0m0.001s
+		sys		0m0.002s
+	
+	real: wall clock time
+	user: total CPU time spent in user-level processes
+	sys:  total CPU time spent in OS.  
+
+		   
+	
+

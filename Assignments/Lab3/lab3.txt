@@ -1,0 +1,124 @@
+
+We first examine whether the override Bug still exist
+by running the ls -aA command on my home directory:
+
+ls -aA ~
+
+It generates result like:
+.
+..
+.bash_history
+.cache
+
+exchanging the -a and -A command:
+ls -Aa ~
+
+Under both conditions, the current directory and home directory are 
+in the output, which signifies that the overriding error exists
+
+1.
+By the following three commands, I download the Coreutils 8.29 source code,
+the signature and keystring
+
+wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz
+wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz.sig
+wget https://ftp.gnu.org/gnu/gnu-keyring.gpg
+
+2.
+tar xJvf coreutils-8.29.tar.xz
+The command is for unzipping the file into the directory "coreutils-8.29"
+-x option is for unzipping
+-J option is for zipping or unzipping .tar.xz files
+
+3.
+After entering the directory by "cd coreutils-8.29"
+we run the following command to configure it to our "coreutils-install" for 
+installation
+./configure --prefix=/u/cs/ugrad/yiqiao/Lab3/coreutils-install
+
+4.
+We run the commands:
+
+make
+make install
+
+to install the package in our "coreutils-install" directory
+
+5.
+Reproducing the bug
+
+We first change our directory:
+cd ~/Lab3/coreutils-install/bin
+
+and run the two ls commands under en_US.UTF-8 locale:
+
+ls -aA
+ls -Aa
+
+They still generate the same output with home and parent directories present:
+.
+..
+.'['
+.b2sum
+
+6.
+
+First we "cd coreutils-8.29" to reach the directory where we put files
+ for installation.
+We copy the patch into a file named myPatch.patch 
+The file starts from "diff --git a/src/ls.c b/src/ls.c"
+Then we run the patch command
+patch -p1<myPatch.patch
+
+It generates the following message:
+
+patching file src/ls.c
+Hunk #1 succeeded at 1900 (offset -3 lines).
+patching file tests/local.mk
+patching file tests/ls/a-option.sh
+
+This signifies that patching of ls.c succeeds
+
+7.
+We perform the configure command again
+
+./configure --prefix=/u/cs/ugrad/yiqiao/Lab3/coreutils-install
+
+The configure command runs without error. But when we run "make" command
+it generates error message:
+
+/u/cs/ugrad/yiqiao/Lab3/coreutils-8.29-3/build-aux/missing: line 81: aclocal-
+1.15: command not found
+
+Since the configure command didn't work out, I check the manual for configure 
+command and try the autoreconf command:
+autoreconf -f -i
+By reading "man autoreconf", I found that:
+-f equals --force, consider all files obsolete
+-i is --install, copy missing auxiliary files
+
+The output is as follow:
+Copying file build-aux/config.rpath
+Copying file m4/extern-inline.m4
+Copying file m4/glibc2.m4
+Copying file m4/intdiv0.m4
+Copying file m4/intl.m4
+Copying file m4/intldir.m4
+...
+
+Then we perform:
+make
+make install
+
+By applying the "echo $?" command,
+we observe that the previous two command run without error
+
+We perform the previous two commands
+ls -aA
+
+We find that . and .. are not displayed in the result
+-A no longer overrides -a
+The change was successful.
+
+Since we do not have root permission, we cannot apply the new "ls" command
+by copying it into /usr/bin/

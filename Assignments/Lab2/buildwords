@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#Keep characters between <td> and </td> tags
+grep "<td>.*\{1,\}<\/td>"|
+
+#Remove all html tags c=enclosed by < and >
+sed 's/<[^>]*>//g'|
+
+#Remove empty lines
+awk NF|
+
+#Keep lines with even line number, i.e., Hawaiian words
+sed -n "g;n;p"|
+
+#Change all uppercase to lowercase, and replace ` with '
+tr "A-Z\`" "a-z\'"|
+
+#Turn all words without Hawaiian letters into new-line characters
+#Reduce the number of continuous new-lines into one
+tr -cs "pk\'mnwlhaeiou" "[\n*]"|
+
+#Sort the result in alphabetical order, and remove duplicates
+sort -u|
+
+#remove the remaining empty lines, i.e., the first line
+awk NF

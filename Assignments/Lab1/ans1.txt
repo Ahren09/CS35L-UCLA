@@ -1,0 +1,100 @@
+1.man -k
+I used the command "man man" to find the answer
+
+2.
+mv is in /usr/bin/mv
+sh is in /usr/bin/sh
+I use "which mv" and "which sh"
+Alternatively, we can use "whereis mv" and "whereis sh"
+
+3.
+ar, pr and tr
+I use find /usr/bin -executable -name ?r
+to find all executable programs with 2 characters and end with "r"
+I use "man ar" "man pr" and "man tr" to find their functionality
+
+ar: create modify and extract from archives
+pr: convert text for printing
+tr: translate or delete characters
+
+4.
+/etc/alternatives/emacs
+I first "cd /usr/bin" and "ls -l grep emacs" to examine files belonging to emacs. Then I see the symbolic link linking to the file above
+
+5.
+The version number is
+gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-36)
+I use "gcc --version"
+
+6.
+"chmod u+sx": sets user ID of the owner of the file on execution and add permission of execution
+"s": set user or group ID
+"x": permission of execution
+"u": user who owns the file
+
+
+"chmod o-w": remove writing permission of others
+"o" means others
+"w" means writing permission
+
+7.I first "cd /usr/local/cs"
+and "find / -type d -mtime 28"
+
+8.
+I use "find /usr/bin -type l" to find the names of commands
+and "find /usr/bin -type l|wc" counts the number of lines, which is the same as the number of symbolic links
+
+9.
+I first "cd /usr/lib64" and "ls -lt" to find the oldest file
+The file at the bottom without a 'd' is the oldest regular file:
+-rwxr-xr-x.  1 root root       19408 Dec 28  2013 librom1394.so.0.3.0
+The file's name is librom1394.so.0.3.0
+
+10.
+from "man locale" I found that locale gets its data from the environment variables that control the locale.
+
+11.
+There are two commands:
+downcase-region
+downcase-word
+I used C-h a and typed "downcase"
+
+12.
+I used "C-h ?" and followed the hints:
+I first "C-h b" and then "C-s". I typed "C-M-r" to search for description of "C-M-r" and read through all of these commands
+C-M-r           isearch-backward-regexp
+C-M-s           isearch-forward-regexp
+C-M-t           transpose-sexps
+C-M-u           backward-up-list
+C-M-v           scroll-other-window
+
+Then I use C-h k [COMMAND] to check the accurate functionality of each command
+C-M-r:
+Do incremental search backward for regular expression.
+
+C-M-s:
+Do incremental search forward for regular expression.
+
+C-M-t:
+transpose expression
+
+C-M-u:
+Move up in parenthesis structure
+
+C-M-v:
+Scroll other window up
+
+13.
+C-g cancels running or partially typed commands
+I use "C-h k C-g" to find the answer
+
+14.
+The yank function reinserts functions killed previously and keeps the cursor at the end of inserted text
+After starting emacs by typing e m a c s, I use "C-h r" to open the manual and "C-s yank" to search for explanation for the yank function
+
+15.
+In emacs, we use C-x d to invoke the dired command
+The numbers of items found by the two commands are exactly the same. 
+"dired" gives information about current and parent directory but ls -l does not
+I use "C-h b" and "C-s dired" to find the command "C-x d",then I compared the results
+

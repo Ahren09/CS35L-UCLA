@@ -1,0 +1,16 @@
+#!/bin/bash
+find-ascii-text()
+{
+    for i in $1/*
+    do
+	str=""
+	if [ -f $i ]
+	then
+	    file $i|grep -i ascii\ text|cut -d ":" -f 1 2>/dev/null
+	elif [ -d $i ]
+	then 
+	    find-ascii-text $i/*
+	fi
+    done
+}
+find-ascii-text $1

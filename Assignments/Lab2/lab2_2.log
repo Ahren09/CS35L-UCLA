@@ -1,0 +1,206 @@
+1.
+We first run the command: 
+   export LC_ALL='C'
+to set standard C as the default language for output
+I checked the locale by the command:
+   locale
+
+2.
+sort /usr/share/dict/words>words
+
+The command first sorts the "words" file under the "dict" directory
+ and output the result into a file named "words"
+
+NOTICE that if default language is not set to C, the above
+ command will yield different output
+
+3.
+wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/assign2.html
+
+The command saves the content of the web page into a file
+"assign2.html"
+
+4.
+tr -c 'A-Za-z' '[\n*]'<assign2.html
+This replaces non-alphabetic characters with the new-line character
+
+-c stands for "complementary". Our target words are non-alphabetic,
+ which are complements of alphabetic characters
+
+NOTICE:
+tr -c 'A-Za-z' '[\n*]'<assign2.html
+replaces non-alphabetic characters with ']' yields WRONG output
+
+5.
+tr -cs 'A-Za-z' '[\n*]' < assign2.html
+This reduces the empty lines in the output, i.e., reducing the
+ continuous occurences of the new-line characters
+-s stands for "squeeze-repeats". It reduces the continuous 
+occurrence of '[\n*]' into a single occurrence
+
+6.
+tr -cs 'A-Za-z' '[\n*]'<assign2.html | sort
+This command sorts the output in alphabetic order
+
+NOTICE:
+the WRONG COMMAND:
+tr -cs 'A-Za-z' '[\n*]' | sort<assign2.html
+will first sort the content in the html file and perform the 
+tr -cs command
+
+7.
+tr -cs 'A-Za-z' '[\n*]'<assign2.html | sort -u
+-u stands for "unique"
+The command removes repeating new-line characters, keeping only 
+one occurrence.
+
+8.
+tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm - words
+the comm stands for the compare command
+
+It compares the result of stdin (the '-') and the "words" file and
+print the result in three columns:
+1st column: elements unique to the 1st set
+2nd column: elements unique to the 2nd set
+3rd column: elements shared by both sets
+
+The '-' plugs the result of last command into specific position of
+ the current command
+
+9.
+tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm -23 - words
+This outputs lines unique to the result from 8.
+
+######## ########
+BUILD MY DICTIONARY
+1.
+wget http://mauimapp.com/moolelo/hwnwdseng.htm
+Get the web page
+
+2.
+
+#Keep characters between <td> and </td> tags
+grep "<td>.*\{1,\}<\/td>"|
+
+#Remove all html tags c=enclosed by < and >
+sed 's/<[^>]*>//g'|
+
+#Remove empty lines
+awk NF|
+
+#Keep lines with even line number, i.e., Hawaiian words
+sed -n "g;n;p"|
+
+#Change all uppercase to lowercase, and replace ` with '
+tr "A-Z\`" "a-z\'"|
+
+#turn all words without Hawaiian letters into new-line characters
+#Reduce the number of continuous new-lines into one
+tr -cs "pk\'mnwlhaeiou" "[\n*]"|
+
+#Sort the result in alphabetical order, and remove duplicates
+sort -u|
+
+#remove the remaining empty lines, i.e., the first line 
+awk NF
+
+To make the script executable, we:
+chmod +x buildwords
+
+To make the Hawaiian dictionary with the website as input, we:
+./buildwords<hwnwdseng.htm>hwords
+
+######  ######
+
+
+
+### Spell Checking ###
+We first save the website in an HTML file:
+wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/assign2.html
+
+To check the spelling of Hawaiian words, we run the commands:
+cat assign2.html|
+tr '[:upper:]' '[:lower:]'|
+tr -cs "pk\'mnwlhaeiou" '[\n*]'|
+sort -u|
+comm -23 - hwords|
+wc -l
+
+The "comm -23 hwords" command is to leave non-Hawaiian words
+(those appearing only in assign2.html) in the output
+
+By running the wc -l command, I count the number of lines of 
+non-Hawaiian words, thus getting the result of 216
+
+To check the spelling of English words, we run the commands:
+cat assign2.html|
+tr -cs 'A-Za-z' '[\n*]'|
+tr '[:upper:]' '[:lower:]'|
+sort -u|
+comm -23 - words|
+wc -l
+We get the result 43, the number of non-English words in assign2.html
+
+Some examples of mis-spelled words as English are:
+
+doctype
+eggert
+emacs
+eword
+grep
+halau
+
+We remove the "wc -l" command and store the results in two files respectively:
+
+Haw.txt: misspelled words as Hawaiian
+Eng.txt: misspelled words as English
+
+The following command checks words that are "misspelled" as English, 
+but not as Hawaiian:
+comm -23 Eng.txt Haw.txt|wc -l
+The result is 37
+
+Some examples:
+usr
+utf
+vandebogart
+wget
+wiki
+wikipedia
+
+The following command checks words that are "misspelled" as Hawaiian,
+but not as English:
+comm -13 Eng.txt Haw.txt|wc -l
+The result is 210
+
+Some examples:
+elopmen
+em
+ema
+imila
+imp
+op
+ope
+
+### NOTIFICATIONS ###
+NOTICE THAT we must use backlash while referring to special
+punctuations in tr and sed:
+sed "s/\`/\'"
+replaces ` with '
+
+NOTICE THAT The lines
+sed "/<tr>/,/<\/td>/d"|
+tr -s '\n'|
+awk NF 
+
+can be replaced by:
+sed "/<\/tr>/,/<\/td>/d"
+Or:
+sed "/tr>/,/<\/td>/d"
+
+NOTICE THAT the lines:
+sed 's/[:upper:]/[:lower:]/g'
+sed "s/\`/\'"
+
+can be replaced by:
+tr "A-Z\`" "a-z\'"

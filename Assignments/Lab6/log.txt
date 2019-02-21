@@ -1,0 +1,84 @@
+
+1.I use the --version command to check version of current sort command:
+sort --version
+sort (GNU coreutils) 8.22
+This shows that current version is newer than 8.6
+
+2.
+od -An -tfF -N 0xffffff </dev/urandom > f.txt
+Since 2 to the 24th power is expressed as 0xffffff in hexadecimal form,
+we can thus produce 2^24 floats.
+0x specifies that the number is a hexadecimal
+
+3.
+The complete command is:
+od -An -tfF -N 0xffffff < /dev/urandom |
+tr -s '[:blank:]' '[\n]' |
+sed '/^$/d'>f.txt
+
+The "tr" command is to replace redundant blanks with single new-line
+characters. "sed" is to remove the empty first line
+
+4.
+First I make sure that PATH environment variable is set properly:
+export PATH=/usr/local/cs/bin:$PATH
+
+By checking "sort --help", I found that parallel option is used as:
+--parallel=N, where N specifies number of processors being used
+
+
+Without "--parallel" argument
+real 9.97
+user 49.57
+sys 0.64
+
+Number of threads = 2
+time -p sort --parallel=2 -g f.txt >/dev/null
+real 24.93
+user 46.70
+sys 0.55
+
+Number of threads = 4
+time -p sort --parallel=4 -g f.txt >/dev/null
+real 14.32
+user 46.65
+sys 0.53
+
+Number of threads = 8
+time -p sort --parallel=8 -g f.txt >/dev/null
+real 10.17
+user 51.14
+sys 0.67
+
+Number of threads = 16
+real 7.04
+user 54.06
+sys 0.67
+
+Number of threads = 32
+real 6.63
+user 74.77
+sys 0.88
+
+Number of threads = 64
+real 6.22
+user 75.58
+sys 1.52
+
+*** Conclusion ***
+The performance of "sort" without "--parallel" option is most similar to
+that of using 8 threads. Thus it's likely that "sort" utilizes 8 threads
+by default.
+
+I observe that as number of threads increases, the 'real' time decreases,
+while 'sys' time increases. This is probably due to the increase in number
+of system calls. 
+
+Also, as we increase number of threads from 32 to 64, the performance does
+not improve greatly.
+
+By "cat /proc/cpuinfo|grep processor",
+I find that number of processors is 32. Multi-threading only improves
+performance significantly when number of threads is less than number of
+processors.
+

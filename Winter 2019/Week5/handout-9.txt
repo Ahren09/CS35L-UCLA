@@ -1,0 +1,69 @@
+1. fstat system call:
+
+    int fstat(int fd, struct stat *buf);
+	fstat system calls returns a structure that contains information about a file.
+	
+	1st argument: fd, file descriptor of the specified file
+	2nd argument: buf, returns a struct stat
+	
+	e.g.
+	
+	struct stat buf;
+	fd = open(filename, O_RDONLY)
+	fstat(fd, &buf);
+	printf("%s %d\n", fd, buf.st_atime); //prints out the access time of the file. 
+	
+
+2. History Command 
+
+	history command stores the recent executed commands. 
+	
+	history | less 
+	# less is also a text editor. 
+	# In fact, the man page is displayed with less. 
+	# So you can navigate/search in less the same way as man page. 
+
+	Press up/down cursor keys in bash 
+	allows you to access commands stored in history
+
+	!number: redo the commands in history with number
+
+	Example: !121
+
+	!string: redo the most recent command in history 
+	which starts with the string
+
+	Example: !fin
+
+3. Middle button of the mouse can be used to 
+	paste a highlighted string in bash. 
+	
+4. Root User
+	Root User is the "God" in Linux. 
+	Normally owned by the administrator of the system. 
+	It can access files without the restriction of the File Permission. 
+	Certain commands can only be executed by the Root User.
+	
+5. alias and unalias command:
+
+	Define new short cuts in bash
+	e.g.: alias sshlnx='ssh zhou@lnxsrv09.seas.ucla.edu'	
+	Then execute sshlnx is equivalent to ssh zhou@lnxsrv09.seas.ucla.edu'
+
+	Just type alias in terminal will show all the alias for the current
+	terminal
+
+	unalias command will remove the alias. 
+	e.g.: unalias sshlnx
+
+6. ~/.bashrc and ~/.bash_profile:
+	
+	Two bash scripts under your home directory
+	
+	Every time you open the terminal, the commands in one of the file 
+	will be executed. 
+	
+	.bash_profile: executed when you log in locally or remotely via ssh
+	.bashrc: executed when you open a terminal or invoke /bin/bash 
+	
+	Add customized environmental variable, alias to these two files. 

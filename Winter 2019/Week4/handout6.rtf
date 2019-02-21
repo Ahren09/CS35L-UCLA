@@ -1,0 +1,276 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw17280\paperh25920\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f0\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 1. Interactive Mode of Python:\
+	Type python in the terminal to enter the interactive mode.\
+	\
+	A simple and fast way to test certain python functionalities\
+	\
+	The interactive mode of python is also widely used as a calculator \
+	\
+2. C vs C++:\
+	C++ //make C larger, return the old value\
+	\
+	C++ is a superset of C. \
+	\
+	C++ contains certain features that are not available in C:\
+		classes and all their associated tricks: templates, inheritance, etc.\
+		Exception handling: try, throw, catch...\
+		STL: vector, string, ...\
+		New and Delete\
+		stream operation: cout/cin, <<, >> \
+		\
+\
+3. Interpreted Language vs Compiled Language:\
+\
+	An interpreted language is a programming language for which \
+	most of its implementations execute instructions directly, \
+	without previously compiling a program into machine-language instructions. \
+	The interpreter executes the program directly, translating each statement into \
+	a sequence of one or more subroutines already compiled into machine code.\
+\
+	Advantage of Interpreted Language:\
+		platform independence (Write once, debug everywhere!)\
+\
+	Disadvantage of Interpreted Language:\
+		Slower execution compared to direct native machine \
+		code execution on the host CPU\
+		\
+	\
+4. Hello World in C:\
+	#include <stdio.h> 	//Header files in C conventionally ends with .h\
+	int main()\
+	\{\
+		printf("Hello, world!\\n");\
+	\}\
+	\
+	Compile:\
+	gcc helloworld.c -o helloworld # compile with gcc instead of g++\
+	./helloworld \
+\
+	\
+6. printf:\
+	in the <stdio.h>\
+	int printf(const char *format, ...); //cout in C. \
+	\
+	The string "format" provides a description of the output, \
+	with placeholders marked by % escape characters, to specify the output \
+	string that the function should produce. \
+	\
+	The return value yields the number of printed characters.\
+	\
+	print out literal strings:\
+		printf("Hello, world\\n"); //\\n is the endl in C++. \
+								  //\\n is the line change character. \
+\
+	Print out variable values:\
+		printf(type specifier, variable name);\
+		\
+		Different variable type has different type specifier:\
+		\
+			variable type 			type specifier\
+			int						%d (prints in decimal), %x (prints in hex)\
+			unsigned int			%u\
+			long					%ld, %lx\
+			unsigned long			%lu\
+			float					%f \
+			double					%lf\
+			char 					%c (prints out the char value), %d(prints out the numerical value)\
+			char *(string)			%s (keeps printing out the char value in the array until it encounters \\0) \
+\
+\
+		int i = 0x12345678;\
+		long k = i * i;\
+		printf("%d\\n", i);	//%d for int\
+		printf("%ld\\n", k); //%ld for long\
+		\
+	Print out variable values in literal strings:\
+		long a[10]\'ef\'bc\'8c i;\
+		\
+		for (i = 0; i < 10; i++) a[i] = i * i;\
+		\
+		for (i = 0; i < 10; i++)\
+			printf("the value of a[%d] is %ld\\n", i, a[i]); \
+			//the %d and the %ld is actually a place holder\
+			//When printf encounters a place holder, \
+			//it will replace it with the value of the corresponding variable. \
+			\
+7. scanf:\
+	int scanf(const char *format, ...);\
+	format: specify the input format\
+	return value: how many variables have been read\
+\
+	read a variable:\
+	int a = 0;\
+	scanf("%d", &a); // do not miss the & before a. \
+					 // & returns the address of variable a\
+					 // Basically, you specify to scanf the address \
+					 // you want to store the value you read. \
+					 \
+	printf("The value you read is %d\\n", a);\
+		\
+	read variable from a string:\
+\
+	int a = -1;\
+	scanf("%d is the value you input", &a);\
+	printf("The value you of a is %d\\n", a);\
+\
+	//scanf matches the string pattern you input \
+	//and read the value of the variable where\
+	//you specify the place holder. \
+\
+8. read/write single character\
+	int getchar(void)\
+		read a single character from stdin and returns it.\
+		If no more single character from stdin, return a special integer EOF. \
+		\
+	void putchar(char c)\
+		write to stdout argument C\
+		same as printf(\'e2\'80\'9c%c\'e2\'80\uc0\u157 , c)\
+		\
+	e.g.\
+		#include <stdio.h>\
+		int main(void)\
+		\{\
+			char c;\
+			while ((c = getchar()) != EOF)\
+					putchar(c);\
+		\}\
+	\
+9. Constant value:\
+	#define NAME value\
+	for example:\
+	\
+	#define ARRAYSIZE 100\
+	int a[ARRAYSIZE];\
+	int main(void)\
+	\{\
+		int i = 0;\
+		for (i = 0; i < ARRAYSIZE; i++)\
+			printf(\'e2\'80\'9c%d\\n\'e2\'80\uc0\u157 , a[i]);\
+	\}\
+\
+	Compiler will replace the all the string "ARRAYSIZE" in \
+	your program with 100 before compile your code. \
+	\
+10. Dynamic memory management:\
+	memory management is done by solely using malloc, free and realloc\
+	\
+	void * malloc(int nbytes); //Same as new in C++\
+		nbytes: number of bytes you need\
+		return value: address of memory blocks containing nbytes reserved. \
+		\
+	void free (void *free); //Same as delete in C++\
+		free: the address of memory blocks you want to revoke.\
+		\
+	void* realloc (void* ptr, size_t size);  //resize the memory blocks\
+		ptr: address of memory blocks\
+		size: new size\
+		return value: new address of the memory blocks. \
+	\
+	#define ARRAYSIZE 10\
+	#define NEWARRAYSIZE 20\
+	int main()\
+	\{\
+		int * ptr;\
+		ptr = (int * ) malloc(ARRAYSIZE * sizeof(int)); \
+		//sizeof return the size of a type in bytes.  \
+		\
+		for (i = 0; i < ARRAYSIZE; i++) \
+			printf("%d ", ptr[i]);\
+			\
+		ptr = int (*) realloc(NEWARRAYSIZE * sizeof(int));\
+		for (i = 0; i < NEWARRAYSIZE ; i++) printf("%d ", ptr[i]);\
+		free(ptr); \
+	\}\
+	\
+11. C string:\
+\
+	C string is defined as an array of bytes and terminated by \
+	a char with numerical value 0. \
+	\
+	e.g.\
+		char a[10] = "hello\\n"; \
+		//This defines a string that can store up to 10 characters \
+		//with value "hello\\n"\
+	\
+	string "hello\\n" is stored in a as follows:\
+	\
+		h e l l o \\n \\0\
+byte	0 1 2 3 4  5  6 \
+\
+	7 bytes are needed to store the string instead of 6!\
+	\
+	\
+	string operations:\
+		all the functions are in the <string.h>\
+		char * strcpy(char *dest, const char *src); \
+		//copy the content in source string into the destination string. \
+		int strlen(const char * string); \
+		//returns the length of the string\
+		char * strcat(char *dest, const char *src); \
+		//Appends a copy of the source string to the destination string.\
+		\
+		int strcmp(const char * str1, const char * str2);\
+		//Compares the C string str1 to the C string str2.\
+		// return value: < 0: str1 is less than str2 in lexicographic order\
+						== 0: str1 and str2 are the same\
+						 > 0: str1 is greater than str2 in lexicographic order\
+						 \
+		strcpy vs =:\
+			strcpy performs a copy of all the char values from the src to destination. \
+			= merely assigning a new value to the char ptr. \
+\
+12.	struct \
+	C has no classes, but you can create composite types with struct. \
+	No functions inside struct only variables. All variables in struct is public. \
+	\
+	struct point \
+	\{\
+		int x, y;\
+	\};\
+	int main(void)\
+	\{\
+		struct point p, * ptr;\
+		p.x = 0, p.y = 3;\
+		ptr = malloc(sizeof(struct point));\
+		p->x = 0, p->y = 3;\
+	\} \
+\
+13. qsort\
+	void qsort(void *base, size_t nel, size_t width,\
+				int (*compar)(const void *A, const void * B));\
+	funcionality:\
+	Sort an array\
+	\
+	base: ptr to the starting of the array\
+	nel: number of element of the array\
+	width: size of each element in the array\
+	Compar: comparing function with return value is int, and take two \
+	void * arguments. \
+		Two arguments are elements of the array\
+		return <0 if *A < *B, 0 if *A == *B, > 0 if *A > *B\
+	\
+	#include <stdio.h>\
+	#include <stdlib.h>\
+	#define ARRAYSIZE 10\
+	int a[ARRAYSIZE ] = \{1, 8, 7, 6, 2, 3, 5, 7, 3, 4\};\
+	int compare (const void *A, const void * B))\
+	\{\
+		return *(int *) A - *(int * B);\
+	\}\
+	int main(void)\
+	\{\
+		int i = 0;\
+		qsort(a, ARRAYSIZE , sizeof(int), compare);\
+		for (i = 0; i < ARRAYSIZE ; i++) \
+			printf(\'e2\'80\'9c%d\\n\'e2\'80\uc0\u157 , a[i]);\
+		return 0;\
+	\} \
+}

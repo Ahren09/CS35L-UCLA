@@ -1,0 +1,117 @@
+1. Thread:
+
+	Thread is the the smallest unit that can be scheduled to run on the CPU. 
+	
+	Normally, by default, each program you wrote only has one thread and thus 
+	can only run on one CPU at the same time. 
+	
+2.  pthread_create function
+
+	int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                          void *(*start_routine) (void *), void *arg);
+						  
+	pthread_create creates a new thread.
+
+	First argument: pointer to an integer, returns the thread descriptor of
+	the thread being created. 
+	
+	Second argument: pointer to struct named pthread_attr_t. This specify the 
+	attribute of the thread you want to create. Normally this argument is NULL 
+	to specify creating a thread with default attribute. 
+	
+	Third argument: pointer to a function with the prototype 
+	void * func(void *)
+	
+	Fourth argument: pointer to an argument which will be passed to the function 
+	specified by the third argument. 
+	
+3. Characteristics of the thread:
+
+	1. All the threads share global variables (share heap and static data)
+	2. Each thread has its own copy of local variables (do not share the stack)
+	3. When the main thread returns from main, or any other threads called
+	exit(), all the threads are terminated. 
+	
+4. pthread_join:
+	
+	Wait for other threads using pthread_join 
+	
+	int pthread_join(pthread_t thread, void **retval);
+	
+	After calling the pthread_join, the current thread will be paused until 
+	the specified thread  exits. 
+
+	First argument: ID of the thread, you want to wait on. 
+	
+	Second argument: 
+	If not NULL, retval points to the return value of the 3rd argument (func) 
+	of pthread_create. 
+	
+	If NULL, the return value of the 3rd argument (func) of pthread_create is 
+	discarded.
+
+5. od command
+	interpreting binary files/streams and write result to stdout. 
+	If file is not specified, read from stdin. 
+	
+	od [-t type] [file] 
+	type:
+		a: character
+		c: character
+		d[size]: decimal. size per integer
+		o[size]: octal. size per integer
+		f[size]: floating point. size per integer
+		x[size]: hex. size per integer
+	
+	echo "hello" | od -t x1
+
+	echo "hello" | od –t f4 
+	# treat the 0x68 0x65 0x6c 0x6c 0x6f 0x0a as floating point.  
+
+6. head command
+
+	head: showing the first part of the file to stdout 
+
+	head [-n number] [file]. 
+	
+	By default, head shows the first 10 lines of a file. When file is not
+	specified, read from stdin
+	
+	-n option: print the first number lines instead of 10 lines
+	
+	head –n 20 /etc/man.config #shows the first 20 lines of /etc/man.config
+	head –n -100 /etc/man.config # do not show the last 100 lines of
+	/etc/man.config.  
+
+7. tail command
+
+	tail: showing the last part of the file to stdout
+
+	tail [-n number] [file]. 
+
+	By default, tail shows the last 10 lines of a file. When file is not
+	specified, read from stdin
+	
+	-n option: print the last number lines instead of 10 lines
+	
+	last –n 20 /etc/man.config #shows the last 20 lines of /etc/man.config
+	last –n +100 /etc/man.config # do not show the first 100 lines of 
+	/etc/man.config.  
+
+8. Top command
+
+	show the resource usage of the program on the system
+	
+	$top
+	PID   USER  PR  NI  VIRT   RES   SHR   S  %CPU %MEM   Time    Command
+	46512 chan  20   0  365580 20472 9684  S  1.0   0.0  0:05.10  emacs
+	15902 zhou  20   0  162560 2972  1644  R  0.7   0.0  0:00.97  top
+	17511 edwa  20   0  414804 17960 9372  S  0.7   0.0  0:00.17  emacs
+
+	User: the user who creates the program
+	%CPU: CPU usage that is relative to 1 CPU. If you have a program that 
+	fully utilizes 4 CPUs, then %CPU will be 200. 
+	
+	%MEM: memory usage
+	Time: execution time since the program starts
+	Command: The command that creates the program. 

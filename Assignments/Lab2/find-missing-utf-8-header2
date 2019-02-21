@@ -1,0 +1,21 @@
+#!/bin/bash
+find-missing-utf-8-header()
+{
+    for i in $1/*
+    do
+	str=""
+	if [ -f $i ]
+	then
+	    file $i|grep -i utf-8\ unicode\ text|cut -d ":" -f 1 >str
+	    firstline=sed -n '1p' $str
+	    if [ $firstline=="-\*-\ coding:\ utf-8\ -\*-" ]
+	    then
+		echo $str
+	    fi
+	elif [ -d $i ]
+	then 
+	     find-missing-utf-8-header $i/*
+	fi
+    done
+}
+find-missing-utf-8-header $1

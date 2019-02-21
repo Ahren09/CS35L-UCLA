@@ -1,0 +1,80 @@
+Q1.
+The patch should improve performance since it solves the overriding
+problem when we call "ls -aA" and "ls -Aa"
+ Also it generates better display of directories
+
+Q2.
+We must pay extra attention scripts that incorporate "ls -aA" command since
+the "-a" option is no longer overriden by "-A"
+Concretely, scripts that incorporate traversal of directories (especially 
+those involving recursive functions) must be examined more carefully.
+
+Q3. 
+When we call the randline command by:
+
+python randline.py -n 1 /dev/null
+
+It outputs error message:
+Traceback (most recent call last):
+  File "randline.py", line 70, in <module>
+    main()
+  File "randline.py", line 64, in main
+    sys.stdout.write(generator.chooseline())
+  File "randline.py", line 34, in chooseline
+    return random.choice(self.lines)
+  File "/usr/lib64/python2.7/random.py", line 274, in choice
+    return seq[int(self.random() * len(seq))]  # raises IndexError if seq is 
+empty
+IndexError: list index out of range
+
+Error checking: "echo $?" outputs 1
+
+This is because on Line 54, the script writes: 
+if numlines <= 0:
+        parser.error("negative count: {0}".
+This means the function returns an error message only if 
+number of lines in the file is smaller than 0. For files 
+with 0 lines, the function will perform undefined behavior
+
+
+Q4.
+When we run the script with python3:
+
+python3 randline.py -n 1 /dev/null
+
+The program returns a syntax error:
+
+File "randline.py", line 65
+    except IOError as (errno, strerror):
+                      ^
+SyntaxError: invalid syntax
+
+This is because Python2 and Python3 have different syntax for
+IOError
+
+Correction:
+If we change the line:
+except IOError as (errno, strerror):
+
+Into:
+except IOError as err:
+
+Running the .py file under Python3, the function will generate the same error 
+messages as does in Python2.
+
+##### Cases of shuf.py #####
+shuf -i 1-9
+shuf -i 9-1
+shuf -i 1-1
+shuf -i 1-5 -n 3 # print 3 numbers
+shuf -i	1-5 -n 7 # print 5 numbers
+
+
+#Consider file.txt with 5 lines
+shuf -n 12 file.txt # print 5 lines
+shuf -n 2 file.txt # print 2 lines
+
+
+shuf -r file.txt #infinite number of lines
+shuf -n 12 -r file.txt # print 12 lines
+shuf -n 12 -r -i 1-5 # print 12 numbers

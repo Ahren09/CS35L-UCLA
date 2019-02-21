@@ -1,0 +1,242 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw17280\paperh25920\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f0\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 1. I/O redirection\
+\
+	Program reads from stdin, writes to stdout and writes error messages to\
+	stderr. \
+\
+	In Linux, by default, stdin, stdout and stderr are all from/to the\
+	console. \
+\
+	<:  redirect stdin from a file\
+	e.g. ./program < input\
+\
+	>: replace the file with the output of stdout of the command\
+\
+	e.g. ls -l > result\
+\
+	>>: append the output of stdout of the command to the end of \
+	the file          \
+\
+	e.g. /program >> input; ls -l >> result\
+\
+\
+	2>: replace the file with the output of stderr of the command\
+	2>>: append the output of stderr of the command to the end of the file\
+	Note: There should be no space between 2 and > \
+\
+	e.g. \
+	find / -name 'ls' 2> error\
+	find / -name 'ls' 2>/dev/null\
+	/dev/null: black hole in the Linux, any things go in disappears. \
+\
+	&>: both stdout and stderr goes to a same file. \
+	e.g.\
+	find / -name 'ls' &> result\
+\
+2. wc [option] [path_to_file]\
+	wc = word count\
+	If no path_to_file is specified, processes data from stdin.\
+	e.g. \
+	\
+	wc /etc/man_db.conf  \
+	131 (line)  723 (word) 5171 (characters)\
+\
+	important options of wc\
+	-l: only showing line count\
+	-w: only showing word count\
+	-c: only showing character count\
+	\
+	Question: How many files are there in /usr/bin on lnxsrv09?\
+	Ans: ls > output\
+		 wc -l output or wc -l < output\
+\
+\
+3. Pipe:\
+	command1 | command2\
+	The stdout of command1 goes to the stdin of command2\
+\
+	e.g. \
+	ls | wc -l\
+\
+	It's simpler and does not create the temporary file output\
+\
+\
+\
+4. grep [options] pattern [filename] \
+   If no path_to_file is specified, processes data from stdin.\
+   print lines that match the pattern\
+   e.g. file:\
+   cs35l\
+   is\
+   fun\
+\
+   grep s file will output:\
+   cs35l\
+   is\
+\
+	ls -p | grep /\
+\
+	Important options of grep\
+	-c: just output how many times pattern are matched\
+	-i: ignore the case differences when matching the pattern\
+	-n: output line number\
+	-v: reverse. Only output lines that does not match the pattern\
+	--color=auto: print out keyword in color\
+\
+5. cut [option] [path_to_file]\
+	If no path_to_file is specified, processes data from stdin.\
+\
+	Remove sections from each line of the input\
+	\
+	usage1: cut -c range\
+	\
+	e.g.:\
+	locale | cut -c 1 # print out the first letter\
+	locale | cut -c 2 # print out the second letter\
+	locale | cut -c 1-5 # print out the first five characters\
+	locale | cut -c 5- # print out all the characters starting from the 5th\
+	one. \
+	locale | cut -c -4 # print out all the characters until the 4th one. \
+\
+\
+	usage2: cut -d 'field delimiter' -f field\
+	locale | cut -d '=' -f 2 #print out all the string after equal sign for\
+	each line. \
+	locale | cut -d '=' -f 1 #print out all the string before equal sign for each line. \
+\
+\
+6. sort [option] [path_to_file]\
+	If no path_to_file is specified, processes data from stdin.\
+\
+	sort lines of text files. \
+\
+	important options of sort\
+	-f: ignore the case differences\
+	-b: ignore leading blanks\
+	-n: sort based on numerical values (default is by string value)\
+	-r: sort reversely\
+	-u: unique. Same lines only output once\
+	-t: specify 'field delimiter'\
+	-k: specify the field to sort with, often used together as the -t option. \
+\
+	For example:\
+	ls | sort\
+\
+	cat /etc/passwd/ | sort\
+\
+	cat /etc/passwd/ | sort -t ':' -k 3 #sort based on the third column \
+\
+	cat /etc/passwd/ | sort -t ':' -k 3 -n #sort based on the third column\
+	with numerical order\
+\
+7. uniq [option] [path_to_file]\
+   If no path_to_file is specified, processes data from stdin.\
+\
+   eliminate duplicated lines of a sorted input\
+   \
+   important options of uniq\
+   -i: ignore case differences\
+   -c: prefix lines by the number of occurrences \
+\
+	last: showing a list of last logged users\
+	\
+	Q: How many different users have logged into the lnxsrv09 in recent times?\
+	last | cut -d ' ' -f 1 | sort | uniq | wc -l \
+	Q: Who logged into lnxsrv09 most times?\
+	last | cut -d ' ' -f 1 | sort | uniq -c | sort -t ' ' -k1 -n\
+\
+\
+8. - character: replace one file with stdin \
+	diff command take two path_to_files as its arguments. \
+\
+	I want to compare the contents I got from stdout of ls command to a file \
+\
+	ls -l | diff file1 #This won\'e2\'80\'99t work as diff expects two inputs \
+	ls -l | diff file1 - #this does the job. \
+\
+\
+9. Regular expression \
+\
+	A sequence of characters that define a matching pattern\
+\
+	Many programming language provides support for regular expression. \
+	We are going to learn the regular expression in bash. \
+\
+	key word in Bash regular expression\
+\
+	. 			represents any character (string with size 1)\
+				e.g. o.o matches oao, obo, \'e2\'80\'a6, o0o, o1o, o2o\'e2\'80\'a6,o?o o;o\
+	[] 			represents any characters within the bracket, \
+				[abcd]oo matches aoo or boo or coo or doo\
+		\
+	-			Used within the [], represents any character within the range\
+	e.g. \
+				e.g. [a-z] matches all lower case letters. \
+				[a-zA-Z] matches all letters. \
+				[0-9] matches all numbers\
+\
+		\
+	$			matches the end of a line \
+	^			When used outside the [], matches the starting of a line \
+				When used inside the [], matches any characters that are not specified. \
+				e.g. [^abc] represents any characters that are not a b or c. \
+		\
+	*			repeat 0 to any times of previous pattern\
+				e.g. .* matches any strings \
+				\
+	\\\{n,m\\\}		repeat n to m times of previous pattern\
+				e.g. 'go\\\{2,3\\\}g', matches goog or gooog. \
+\
+ \
+10. tr [option] set1 [set2]\
+\
+	transform or delete characters. \
+	read from stdin and output to stdout\
+	set1 and set2 is usually regular expression\
+\
+\
+	important options to tr\
+	-d: delete all characters in set1\
+\
+	e.g.:\
+	locale | tr [a-z] [A-Z] #transform all the lower case letters into upper case letters\
+	locale | tr -d [0-9] # delete all the numbers\
+\
+11. sed \
+	sed [option] function\
+	The function part is actually a programming language. So it can basically\
+	do anything\
+	\
+	replace of sed:\
+	sed "s/<match pattern>/<new string>/g"\
+	<match pattern> can be a regular expression\
+	\
+	e.g. \
+	replace all the starting LC in locale command with CL\
+	sed "s/^LC/CL/g"\
+	\
+	delete all the en_US in locale command\
+	sed "s/en_US//g"\
+\
+	\
+\
+Extended Material:\
+\
+	awk command, sed command, xargs command\
+	Extended regular expression: the regular expression we learned is called\
+	as the basic regular expression. \
+	There is a more powerful set of regular expression, known as extended\
+	regular expression. \
+	Note that if you write an extended regular expression, you must pass a -E\
+	option to the command. \
+\
+ \
+}

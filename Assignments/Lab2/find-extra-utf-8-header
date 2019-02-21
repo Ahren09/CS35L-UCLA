@@ -1,0 +1,16 @@
+#!/bin/bash                                                                     
+find-extra-utf-8-header()
+{
+    for i in $1/*
+    do
+        str=""
+        if [[ -f $i ]] && [[ `sed -n '1p' $i` = "-*- coding: utf-8 -*-" ]]
+        then
+	file $i|grep -i ascii\ text|cut -d ":" -f 1 2>/dev/null
+        elif [ -d $i ]
+        then
+             find-extra-utf-8-header $i/*
+        fi
+    done
+}
+find-extra-utf-8-header $1

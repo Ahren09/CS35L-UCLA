@@ -1,0 +1,10 @@
+#!/bin/bashread -t 3
+for i in *
+
+if [ -d "$i" ]
+  then
+     echo "这个是$i目录"
+  else
+    echo "找不到$i这个目录"
+
+fi

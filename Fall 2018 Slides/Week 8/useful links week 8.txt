@@ -1,0 +1,12 @@
+Useful overview of dynamic libraries:
+http://www.ibm.com/developerworks/library/l-dynamic-libraries/
+Man page for DL API:
+https://linux.die.net/man/3/dlopen
+Shared libraries:
+http://www.ibm.com/developerworks/library/l-lpic1-102-3/
+Examples and Introduction to Program Library
+http://tldp.org/HOWTO/Program-Library-HOWTO/index.html
+Static, Shared Dynamic and Loadable Linux Libraries:
+http://www.yolinux.com/TUTORIALS/LibraryArchives-StaticAndDynamic.html
+Linux man page of VDSO:
+http://man7.org/linux/man-pages/man7/vdso.7.html 

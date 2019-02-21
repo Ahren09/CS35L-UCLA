@@ -1,0 +1,260 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier;\f1\fnil\fcharset134 PingFangSC-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw17280\paperh25920\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f0\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 1. What is the shell?\
+\
+	Shell communicates between the user and the OS. \
+	The user sends commands to the OS through shell and \
+	shell displays the result from the OS to the user.  \
+\
+2. What is bash\
+\
+	Bash is a special type of the shell. \
+	Bash is another contribution from the GNU project. Author of bash is\
+	Brian Fox.  \
+	\
+	There are other shell programs in Linux. \
+	For example: \
+	sh (Original Unix Shell developed by Ken Thompson in Bell's Lab) at \
+	/bin/sh\
+	csh (C Shell  developed by Bill Joy) at /bin/csh\
+\
+	Different shells in Linux are mostly compatible, but they do \
+	have some subtle differences. \
+\
+3. What is bash script\
+\
+	Bash script is a script contains many bash commands. \
+	Bash script makes you life easier by just running one command \
+	(the command to invoke the bash script) instead of invoking and \
+	remembering multiple commands. \
+\
+4. Invoke bash script:\
+	Make sure you have set the execute permission!\
+	bash path_to_the_script \
+	or just\
+	path_to_the_script\
+\
+5. Hello World program \
+\
+	#!/bin/bash   <----- The first line of the script tells \
+	the system which shell to use to invoke the script\
+	echo "Hello world!"\
+\
+5. Comments\
+   Comments in bash start with #\
+\
+6. Variables in bash\
+	\
+	variables are assigned using =\
+	There is no need to declare a variable, \
+	variable is declared when you get assign a value to it.\
+	For example var=5  # note: there cannot be any space before or after = \
+\
+	$ operator shows the value of the variable: For example\
+	var=5\
+	echo var   #print var\
+	echo $var  #print 5\
+\
+7. Arithmetic operation\
+	Bash script will treat most of the constant value by default as a string\
+\
+	var=$(()) does the arithmetic calculation\
+\
+	var=5+3 #var=5+3\
+	var=$((5 + 3)) #var=8\
+	var=$(($var + 1)) #var=9\
+\
+\
+8. reverse quote mark(backticks), \
+\
+	The string in backticks is interpreted as command. For example:\
+	a=`ls /usr/bin`\
+	echo $a #prints out all the files in /usr/bin/\
+\
+	$() is the same as backticks. \
+	a=$(ls /usr/bin/)\
+	echo $a\
+\
+9. Read from input (cin)\
+	Command read:\
+	usage read variable_name \
+	For example: read val\
+\
+	Important options:\
+	-p
+\f1 \'a3\'ba
+\f0  allows to specify the prompt\
+	For example:\
+	read -p 'Username:' val\
+\
+10. condition statement\
+\
+	if [ condition ] #There needs to be space before and after condition \
+	then	#then must be in a seperate line\
+		commands\
+	fi	#fi must be in a seperate line\
+\
+	if [ condition ] #There needs to be space before and after condition\
+	then #then must be in a seperate line\
+		commands\
+	else #else must be in a seperate line\
+		commands\
+	fi #fi must be in a seperate line\
+\
+	if [ condition ] #There needs to be space before and after condition\
+	then #then must be in a seperate line\
+		commands\
+	elif [ condition ] #elif must be in a seperate line\
+	then # then must be in a seperate line\
+		commands\
+	else # else must be in a seperate line \
+		commands\
+	fi #fi must be in a seperate line\
+	\
+11. Tests\
+\
+	-e file 		FILE exists.\
+	-f file 		FILE exists and it is a regular file\
+	-d file 		FILE exists and is a directory.\
+	-r, -w, -x file 	FILE exists and the read/write/execute permission is\
+	granted\
+	\
+	-n string		The length of string is greater than zero.\
+	-z string		The length of string is zero \
+	\
+	string1 == string2	string1 is equal to string2\
+	string1 != string2	string1 is not equal to string2\
+	\
+	integer1 -eq integer2	integer1 is numerically equal to integer2\
+	integer1 -gt integer2	integer1 is numerically greater than integer2\
+	integer1 -ge integer2	integer1 is numerically greater than or equal to\
+	integer2\
+	integer1 -lt integer2	integer1 is numerically less than integer2\
+	integer1 -le integer2	integer1 is numerically less than or equal to\
+	integer2\
+\
+	Note: == is used to compare between strings while -eq is used to compare\
+	between integers\
+\
+	var1=100\
+	var2=0100\
+\
+	$var1 == $var2 return false but $var1 eq $var2 return true\
+\
+12. and and or and not\
+	and: &&\
+	or: ||\
+	not: !\
+	For example: \
+	if ! [ $var1 == $var2 ] # space between ! and [ is important\
+	if [ condition ] || [ condition2 ]\
+	if [ condition ] && [ condition2 ]\
+\
+	Conditions can be nested using []:\
+	if [ [ condition ] && [ condition2 ] ] || [ ! [ condition ] ]\
+	\
+13. Loops\
+\
+	while [ condition ] #There needs to be space before and after condition\
+	do\
+		commands\
+	done \
+\
+	until [ condition ] #There needs to be space before and after condition\
+	do\
+		commands\
+	done\
+\
+	for var in <list>\
+	do\
+		commands\
+	done\
+\
+	if <list> is string, then var iterates all the words in the string \
+	(words are separated with space)\
+\
+	string="a b c"\
+\
+	for i in $string\
+	do \
+		echo $i\
+	done\
+\
+	for i in `ls /usr/bin`\
+	do \
+		echo $i\
+	done\
+\
+	<list> can be integer\
+\
+	for i in \{1..5\}\
+	do\
+		echo $i\
+	done \
+\
+	There is break and continue in loops. \
+	\
+14.  Functions\
+\
+	function function_name() \
+	\{\
+		commands\
+	\}\
+\
+	function_name() \
+	\{\
+		commands\
+	\}\
+\
+	pass the arguments to functions:\
+	$0: name of the functions\
+	$1: first arguments\
+	... \
+\
+	Return value: use the return key word\
+	Get the return value: $? \
+	\
+	foo()\
+	\{\
+		echo $1\
+		return 3\
+	\}\
+\
+	foo 123\
+	echo $?	#Should output 3\
+\
+15. Passing command line arguments:\
+\
+	$0: The first command line argument\
+	$1: The second command line argument\
+	$2: The third command line argument\
+	...\
+	$# - How many arguments were passed to the Bash script.\
+	$@ - All the arguments supplied to the Bash script. \
+	(Note: Not including $0)\
+\
+\
+\
+16. Debugging bash scripts\
+\
+	command: bash \
+	useful options:\
+	-n: do not execute the script, just check for syntax errors\
+	-x: print out execution stream\
+	\
+	e.g. \
+	bash -n path_to_the_script\
+	bash -x path_to_the_script\
+\
+	\
+\
+	\
+	\
+}

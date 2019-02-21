@@ -1,0 +1,150 @@
+1. GDB: The GNU Project Debuuger
+	GDB is a debugger for C/C++,  it allows you to understand why your 
+	code does not work
+	
+	Common routines to use gdb:
+	
+	A.	compile your code with the -g flag:
+		gcc -g -o bug bug.c 
+		
+		The -g flag adds addtional debugging information to the executable file 
+		(e.g. source code) so that the debugger can print out the correct information. 
+		
+	B.	Invoking gdb to debug:
+		In terminal type gdb path_to_executable
+		e.g. 
+		gdb path_to_executable
+		
+	C.	Run your code in GDB (see part 2 of the handout)
+			
+	D.	To quit gdb:
+			type quit or q in GDB
+		
+2. 	Starting the program under GDB:
+		Use the run command to start program under GDB such as 
+		(gdb) run
+		
+		You can pass command line arguments or io redirection to the 
+		program as you did in terminal.
+		
+		e.g. (gdb) run CS35L > output
+
+		You can view that the only difference between invoking program in gdb 
+		and invoking program in terminal is that the path_to_executable in terminal 
+		is replaced with run command in gdb. 
+			
+		If the program generates an exception, GDB will tell you which line of 
+		your code fails. 
+	
+3.	Kill the current debugging program
+
+	kill command can be used to kill the current program you are 
+	debugging and restart the debug. Simply use it as follows:
+	
+	(gdb) kill
+	
+4. 	Showing information	
+
+	Showing the calltrace:
+		backtrace (or the short form bt) shows the calltrace.
+		
+	See source code in gdb:
+		list command
+		
+		list linenumber: 	prints out source code around linenumber
+
+		list function_name:	prints out the source code of the function
+		
+		list: 				lists ten lines after previous list. 
+	
+	Showing the value of variables:
+		Use the print command to show the values of a variable or even values from 
+		expressions. 
+		
+		print i #prints the value of i. 
+	
+		print *(ptr) #shows the value where ptr variable points to. 
+		
+		print a[1] # shows you the value of element a[1] where a is an array
+		
+		To print out first 5 values in array a, use:
+			print a[0]@5
+		
+5.	breakpoints:
+		A breakpoint is a spot in your program where you would like to stop the 
+		execution of your program to figure out why your program went wrong. 
+		
+		To set a breakpoint, using the break command (or the short form b):
+			break linenumber				sets a breakpoint at the given liner number. 
+											Execution stops before the line has been executed. 
+
+			break filename: linenumber		if your executable is compiled with multiple files, 
+											you may want to specify filename as well. 
+			e.g. 
+			(gdb) b 123 #set breakpoint at line 123
+			(gdb) b main.c:456 # set breakpoint at line 456 for main.c	
+			
+		
+			break function 					sets a breakpoint at the given function. 
+			break filename: function  		Execution stops before the function has been executed. 
+			
+			e.g. 
+			(gdb) b foo #set breakpoint at function foo
+			(gdb) b main.c:foo # set breakpoint at function foo in main.c	
+			
+		To continue executing from the breakpoint, use the c command
+			e.g. 
+			(gdb) b foo #set breakpoint at function foo
+			(gdb) run # execute the code and stops at function foo
+			(gdb) c # continue executing
+		
+		To see all the breakpoints, type the info breakpoint in gdb.
+			info commands is used to print out information in gdb, 
+				do help info in gdb for more information. 
+		
+		To clear the breakpoint, use delete or clear command
+
+			delete command:
+				(gdb) delete will delete all breakpoints you have set
+				(gdb) delete number in gdb will delete the breakpoint numbered number. 
+				breakpoint number can be shown with info breakpoints
+			
+			clear command:
+				clear function					clears the breakpoint set on the function
+				clear filename: function 
+				
+				clear linenumber				clears the breakpoint set on the line
+				clear filename: linenumber 
+				
+6.	Single steps execution:
+		step (or the shorter form s)
+				go ahead and execute the current source line, and then 
+				stop execution again before the next source line.
+			
+		next (or the shorter form n)
+				Similar to the previous command, 
+				except that if the line about to be executed is a function call, 
+				then that function call will be completely executed before execution stops again. 
+		until: 
+				Similar to the previous command, 
+				except that if you are at the end of a loop, 
+				until will continue execution until the loop is exited. 
+				
+
+7.	Getting help in gdb:
+		help command provides the documentation of commands:
+			help command_name gives you the description of a command
+			e.g.
+			(gdb) help info
+		
+		apropos command searches all the commands that contain keyword in 
+		their description
+		
+		e.g.
+			(gdb) apropos breakpoint #find all the commands related to breakpoint
+
+
+		
+		
+			
+	

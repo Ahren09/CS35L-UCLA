@@ -1,0 +1,15 @@
+Signup for Assignment 10 Presentation (No later than Oct 21, 11:55pm)
+Spec: https://web.cs.ucla.edu/classes/fall18/cs35L/assign/assign10.html
+Signup link: https://goo.gl/yX6MM1
+
+Requirements:
+- Topic	on recent research in computer science
+- Technical content is required
+- 1 or 2 people per team
+- do a 10 minutes talk in class
+- Use slides and upload	to CCLE	before presentation
+- Participation in Q&A
+- Hand-in a brief research report (due in the last week)
+
+Slides and lab/assignment hints:
+https://github.com/kumokay/CS35L

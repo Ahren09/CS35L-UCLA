@@ -1,0 +1,361 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw17280\paperh25920\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f0\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 1. Linux filesystem hierarchy\
+\
+	There are three types of files inside the Linux file system: \
+	regular file, directory, symbolic link\
+\
+	regular file: txt file, audio file, graphics file. \
+	\
+	directory: contain other files: regular files, directories, \
+	symbolic links under it. \
+\
+	symbolic link: a short cut to other files. \
+	See part 16 in this handout on how to create \
+	a symbolic link. \
+\
+	Linux file system is structured as a tree. \
+	The root of the tree is the / directory. \
+	All other files reside under the / directory. \
+	The / directory is also known as the root directory. \
+\
+	Two special directories that are under every directory:\
+	.: point to the current directory\
+	..: the parent directory. Note: .. in / points to itself\
+\
+2. Basic commands: pwd/cd/ls\
+\
+	pwd: print out current directory\
+\
+	cd (change directory). \
+\
+	ls (list): list files under the directory \
+\
+3. Path: Absolute Path vs Relative Path. \
+\
+	Absolute path: starts from the /, for example: /usr/bin/. \
+	Relative path: does not start from the /, \
+	for example: ../usr/bin/.  \
+	\
+	What file the relative path points to is based on your current \
+	directory. \
+\
+4. cd command \
+\
+	cd (change directory)\
+\
+	usage: cd path_to_dir. \
+\
+	Note: path can be relative or absolute. \
+\
+	cd -: return to the previous working directory\
+\
+5. ls command\
+\
+	usage: \
+	1. ls, list the files under the current directory. \
+	2. ls path_to_dir, list the files under the directory \
+	specified by the path. \
+	Path can be absolute or relative. \
+	For example, ls /usr/bin/, ls ../usr/\
+	3. ls path_to_regular_file:\
+		list the attribute the file specified by the ls command.\
+		A simple way to test whether a file exists or not. \
+\
+	important options of ls:\
+\
+	ls -a: list all the files (including the hidden files) in \
+		   the directory\
+		   On Linux, a file starts with . in its name is a hidden \
+		   file \
+			\
+	ls -l: list the details of each file.\
+		   \
+\
+	ls -t: list the files based on file's modification date. \
+	ls -r: list the files in the reversed sorting order.\
+\
+	These options can be combined. ls -a -l -t is equal to ls -alt\
+\
+6.  The general format to execute a command:\
+\
+	command [-option] [parameter1 parameter2.....] \
+\
+	For example:\
+\
+	ls -al /usr/bin\
+\
+	ls is the command, -al is the option and /usr/bin is \
+	the parameter. \
+\
+	Note:\
+	\
+	0. option and parameters are optional, you can run a command \
+	without them, such as pwd\
+	1. options can be combined or separated. \
+	e.g. ls -al is the same effects as ls -a -l \
+	2. all parts of the command are case sensitive ls != LS\
+	3. multiple spaces are as the same as one space: \
+	ls -a has the same as ls    -a\
+	4. Once press enter key, commands are executed. \
+	Commands can be spilt into two lines with the \\ character. 	\
+\
+	\
+7. Manual page (often short as man page):\
+\
+	Man page provides a detailed description of all the certain \
+	command. \
+\
+	To get the man page for a certain command: use man command, \
+	for example: man ls \
+\
+	Move within man page:\
+ \
+	j, k: move up and down\
+	f, space, pagedown: move down one page\
+	b, pageup: move up one page\
+	g, home: go to the first page\
+	G, end: go to the last page \
+\
+	Search within the man page:\
+	/string: search forward for the string\
+	?string: search backward for the string\
+	n: next search\
+	N: previous search\
+	 \
+	Other commands in man page: \
+	q: exit from the man page. \
+\
+	Bash commands related to man page. \
+	whatis = man -f\
+	usage: whatis command\
+\
+	whatis provides a short description of the command. \
+\
+	apropos = man -k \
+	usage: apropos keyword\
+\
+	apropos search all the description of the man page \
+	that contains key word. 	\
+	\
+8. Environment variable:\
+	A variable in the system which affects the way program executes. \
+	\
+	env command shows all the environment variables in the system. \
+	\
+	Print the value of the environment variables: \
+		echo $var-name\
+		e.g. echo $PATH\
+			 echo $HOME\
+	\
+	Set the value of the environment variables: \
+		export var-name=value\
+		#Note: The new value of the environment variable will only \
+		#affect the current terminal. \
+		\
+		e.g. export HOME="/bin"\
+			 export PATH=`pwd`:$PATH \
+		\
+9. HOME environment variable\
+	Specifies the home directory.\
+\
+10. PATH environment variable and which command\
+	PATH contains all the path to find the command with descending priority.\
+	 \
+	which command_name\
+	which command tells you how does the bash find the command  \
+	based on $PATH variable. \
+	\
+	e.g. which ls \
+\
+11. locale-specific environment variable and locale command\
+	locale-specific environment variable specify\
+	language, regional, time and date, preference settings\
+	\
+	LC_ALL: changes the value of all the locale-specific \
+	environment variables\
+	\
+	locale command:\
+		locale outputs the value of all the locale-specific \
+		environment variables\
+\
+		locale -a outputs all the valid values of the locale-specific \
+		variables. 	\
+		\
+12. find command:\
+	usage: find path_to_dir arguments. \
+	\
+	find files under the specified directory. \
+	\
+\
+	Important arguments:\
+	-name: specify name of the file you want to find: \
+	e.g. \
+	find / -name ls\
+	\
+	-type: specify the type of the file you want to find. \
+	\
+	type can be\
+	d: directory\
+	f: regular file\
+	l: symbolic link\
+	\
+	e.g. \
+	To find all the regular file under /var/tmp\
+	\
+	find /var/tmp -type f \
+		\
+	\
+13. Tab and Ctrl+C key:\
+	Tab key is used for auto-completion. \
+	Auto-completion can be applied to command name/file name etc.. \
+	e.g. \
+	Type em<tab>, the shell will auto-complete emacs for you. \
+	\
+	Life is short, use tab!\
+	\
+	Ctrl+C key is used to terminate the execution of a command.\
+\
+\
+14. cp/mv/rm commands. \
+\
+	cp (copy): copy a file. \
+\
+	usage:\
+		cp path_to_source_file path_to_destination_file\
+		cp path_to_source_file1 path_to_source_file2 \\ \
+		path_to_source_file3 ... path_to_dir\
+		\
+		e.g. cp a.txt /usr/bin/b.txt ../c.txt /var/tmp\
+		#copy a.txt under current directory, b.txt under \
+		/usr/bin/ and ../c.txt to /var/tmp/\
+		\
+	important options for cp:\
+		cp -a: copy while preserve symbolic links and file \
+		permissions.\
+		cp -i: interactive mode. \
+		Ask for confirmation when the cp overwrites existing file. \
+		cp -r: recursive mode, cp all directories. \
+\
+	mv (move): move a file. \
+	\
+	Estentially same as cp, except the source files will be deleted \
+	before the command complete. \
+\
+	usage:\
+		mv path_to_source_file path_to_destination_file\
+		mv path_to_source_file1 path_to_source_file2 \\\
+		path_to_source_file3 ... path_to_dir\
+\
+	mv is often used to rename a file. \
+	e.g. mv a.txt b.txt \
+	#change the file named a.txt to b.txt\
+\
+	Important options to mv:\
+		mv -i: interactive mode. \
+		Ask for confirmation when the mv overwrites existing file. \
+	\
+	rm: delete a file. \
+\
+	usage: rm path_to_file1 path_to_file2 ... \
+\
+	Important options to rm:\
+		rm -i: interactive mode, ask for confirmation before remove \
+		files.  \
+		rm -r: recursive mode, deletes all the contents inside a \
+		directory\
+		rm -f: force to remove without asking for confirmation \
+		under any circumstances. \
+	\
+	Exercise:\
+		1. Create a text file named a.txt with any content you \
+		like under your home directory. \
+		2. Copy a.txt to b.txt under your home directory. \
+		3. Rename b.txt to bb.txt with the mv command. \
+		4. Delete b.txt and bb.txt (You can use one rm command\
+		to delete them)\
+		\
+		\
+\
+15. cat command:\
+\
+	cat(concatenation): print the content of a file/files to the \
+	console.\
+\
+	When there are more than one argument to cat, \
+	it will concatenate the content of all the files and then \
+	print out to console. \
+	\
+	usage: \
+		cat path_to_file\
+		cat path_to_file1 path_to_file2 ... \
+\
+	important options of cat:\
+	cat -n: list the line numbers when printing out the content. \
+	\
+	Exercise:\
+		Create three txt files with emacs named a.txt, b.txt and \
+		c.txt with any content you like under your home directory. \
+		Use cat to print these three files individually and then \
+		print them altogether. \
+		\
+\
+16. mkdir command\
+	mkdir: create an empty directory\
+	usage: mkdir path_to_dir\
+	\
+	Exercise:\
+		1. Create an empty directory named test under your \
+		home directory. \
+		\
+		Use ls to verify it exists. \
+		2. Create an empty directory named test-Your-9-digit-UID \
+		under /var/tmp/. \
+		(You can do this with a single command.) \
+		Use ls to verify it exists. \
+\
+17. ln -s command:\
+	ln -s command is used to create a symbolic link\
+	usage:\
+		ln -s path_to_target_file path_to_link\
+\
+	Exercise:\
+		1. Create a symbolic link to a regular file. \
+		If you delete the symbolic link, will the regular file \
+		be deleted? \
+		If you delete the regular file, can you still open the \
+		symbolic link. \
+		\
+		2. Can you create a symbolic link to a directory?\
+		\
+		3. Can you create a symbolic link to a symbolic link?\
+\
+16. diff command:\
+	diff command compares two files and output their differences. \
+	usage:\
+		diff path_to_file1 path_to_file2\
+	\
+	Exercise:\
+		Try and learn the examples in \
+		https://www.computerhope.com/unix/udiff.htm\
+		(Second hit in google by searching: diff linux\
+		\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

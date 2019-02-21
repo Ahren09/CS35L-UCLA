@@ -1,0 +1,74 @@
+Before testing the functions,
+I generate two files as input:
+input1.txt, with size 1,000,000 bytes
+input2.txt, with size 5,000,000 bytes
+
+The commadn i used waswith the command:
+base64 /dev/urandom | head -c 1000000 > input2.txt
+
+############## Comparing performances on different file sizes ##############
+The following "time" command is used to return info of runtime
+time ./sfrob<input1.txt>output1.txt
+
+*** sfrob ***
+input1.txt			`
+real	0m0.249s
+user	0m0.237s
+sys	0m0.010s
+
+input2.txt
+real	0m0.053s
+user	0m0.047s
+sys	0m0.004s
+
+*** sfrobu ***
+input1.txt
+real	0m11.471s
+user	0m1.347s
+sys	0m10.078s
+
+input2.txt
+real	0m2.195s
+user	0m0.305s
+sys	0m1.879s
+
+sfrob is much faster than sfrobu
+
+############## Comparing the five programs ##############
+We make the comparison across different programs' performance
+on processing a large file with size of 5,000,000 bytes
+
+*** sfrob ***
+real    0m0.249s
+user    0m0.237s
+sys     0m0.010s
+
+*** sfrobu ***
+real    0m11.471s
+user    0m1.347s
+sys     0m10.078s
+
+*** sfrobu -f ***
+real	0m11.550s
+user	0m1.377s
+sys	0m10.115s
+
+*** sfrobs ***
+l	0m0.002s
+user	0m0.000s
+sys	0m0.001s
+
+*** sfrobs -f ***
+real	0m0.003s
+user	0m0.000s
+sys	0m0.001s
+
+############## Conclusion ##############
+For processing a large file, the speed ranking is
+sfrobs
+sfrobs -f
+sfrob
+sfrobu
+sfrobu -f
+
+
