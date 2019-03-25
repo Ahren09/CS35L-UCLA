@@ -1,0 +1,74 @@
+1. dl API: load a shared library during runtime
+
+	A. void * dlopen(const char * filename, int flag);
+	
+	load the dynamc linked library specified by the filename and returns the 
+	handler. 
+	
+	flag: specify how to handle the symbol, usually
+	RTLD_LOCAL | RTLD_LAZY
+	
+	
+	B. void * dlsym(void * handle, const char * symbol);
+	
+	Returns the address of the specified symbol
+	
+	first arg: a handle returned by dlopen 
+	
+	second arg: symbol name, usually the name of the function you want to call 
+	from the shared library
+	
+	C. int dlclose(void * handle);
+	
+	unload the dynamic linked library
+	return 0 on success, non-zero on error
+	
+2. Code example: Invoke void foo(void) function in libprint.so
+
+
+	#include <dlfcn.h> 
+	int main(void)
+	{
+		void * handle = NULL;
+				void (* func_ptr)(void) = NULL; 
+
+		handle = dlopen("./libprint.so", RTLD_LOCAL | RTLD_LAZY);
+				func_ptr = dlsym(handle, "foo");
+				(*func_ptr)();
+				
+		dlclose(handle);
+	}
+
+3. GCC constructor/Destructor
+
+	__attribute__((constructor))
+	
+	specify a function would be executed when the dynamic linked library 
+	is loaded into memory
+	
+	__attribute__((destructor))
+	
+	specify a function would be executed when the dynamic linked library is 
+	unloaded from memory
+
+4. Code example:
+
+	__attribute__ ((__constructor__))
+	void myinit(void)
+	{
+			printf("Init\n");
+	}
+
+	__attribute__ ((__destructor__))
+	void myexit(void)
+	{
+			printf("Exit\n");
+	}
+	
+5. GPG command
+
+	Command to generate and manage public/private key pairs, encrypted file 
+	with keys and produce signature. 
+	
+	See chapter 1: Getting started of the official manual for more info: 
+	https://www.gnupg.org/gph/en/manual.html 

@@ -1,0 +1,109 @@
+2.
+Checkout the current commit into a new branch "quote":
+git checkout -b quote
+
+To make sure I am on the right branch, I do:
+git branch
+
+  master
+* quote
+
+The result shows that I am on the right branch "quote"
+
+3.
+Through the patching message, I obtain the names of files changed by the patch:
+patching file src/cmp.c
+patching file src/context.c
+patching file src/diff.c
+patching file src/diff3.c
+patching file src/dir.c
+patching file src/sdiff.c
+patching file src/util.c
+
+4.
+I open each of the listed files above by emacs, use C-x a 4 to add the file
+into my ChangeLog and Edit the log message
+
+For example, I open the cmp.c file by
+emacs src/cmp.c
+
+and I apply:
+C-x 4 a
+then add the corresponding entries to changeLog and write log message:
+Changing all of the "`" to "'"
+
+After adding all entries, my final ChangeLog may look like:
+
+2019-03-10  Yiqiao Jin  <yiqiao@lnxsrv09.seas.ucla.edu>
+
+	* src/diff.c: Changing all of the "`" to "'"
+
+        * src/cmp.c: Changing all of the "`" to "'"
+	...
+
+6.
+git commit -aF ChangeLog
+This uses ChangeLog to specify the commit message
+
+Create a format patch:
+git format-patch -1 --stdout > formatted-patch.txt
+
+7.
+For the partner part, after swapping formatted-patch files,
+I created a branch in order to check the functionality without altering my
+version. On this branch I used git am to apply the patch
+
+8.
+My partner is Yufeng Zhang, UID: 105111021
+
+I rename his patch to "formatted-patch-partner.txt" in order to patch it
+git am formatted-patch-partner.txt
+
+
+Applying: 2019-03-12 Yufeng Zhang <yufengz@lnxsrv09.seas.ucla.edu>
+The above result shows that patching is successful
+
+To verify the patching is successful, I used this command to verify that 
+ChangeLog works:
+
+make check
+make distdir
+
+After running for a while, it creates a new folder: diffutils-3.0.1-d426
+Then I cd into that folder and checked the ChangeLog:
+
+The first entry is the entry created by my partner:
+2019-03-13  Yufeng Zhang  <yufeng@ucla.edu>
+
+        2019-03-12 Yufeng Zhang <yufengz@lnxsrv09.seas.ucla.edu>
+         * src/util.c: applied patch to change quotes in string constant
+
+         * src/sdiff.c: applied patch to change quotes in string constant
+
+This signifies that patching of my partner's patch is successful.
+
+10.
+First I exit all of my terminals and log into SEASnet lnxsrv through ssh -X
+command instead of ssh:
+
+ssh -X yiqiao@lnxsrv09.seas.ucla.edu
+
+On my local host, I open Xquartz
+
+Next, I update my PATH:
+
+export PATH=/usr/local/cs/bin:$PATH
+
+By using git clone, I clone the emacs git repository:
+
+git clone https://git.savannah.gnu.org/git/emacs.git
+
+Then I cd into the directory containing the copy of the emacs git 
+repository's master branch and ran gitk on it:
+
+cd ~/Lab9/emacs
+gitk
+
+A window pops up in XQuartz containing the repository
+I scrolled down to find the target merge, which is at 17:11:31
+on 2015-01-24

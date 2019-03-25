@@ -1,0 +1,168 @@
+1. What’s the difference between sed and grep? Be concise.
+
+grep searches for a certain pattern from a file, or stdin if no file is specified.
+sed, however, stands for stream editor and is mostly used to replace, delete or modify the
+text. 
+
+2. What does the following script print out?1. #!/bin/grep is 2.
+3. Hello
+4. this
+5. is
+6. a test!
+
+The script outputs:
+this
+is
+
+3. What’s a symbolic link (often referred to as a soft link)? How does this differ from a non- symbolic link (often referred to as a hard link)?
+
+A soft link is a file that has the information to point to another file/inode, which points to some data on the hard drive.
+A hard link is a direct pointer to the original inode. 
+For example, renaming the original file that a hard link points wouldn't affect the hardlink. However, renaming the file that a soft link points to would decapacitate the soft link. 
+
+4. When you don’t know how to do something in Linux, where should you first look (other than online)?
+
+Either the man page or use the whatis command.
+You can also use the '-h' or '--help' flag on commands. e.g.: wget -h
+
+5. What’s stored on a thread’s (or process’ for single threaded applications) stack?
+
+It's own sets of local variables, return addresses and frame pointers
+
+6. As part of a class project you and a partner share access to an svn repository hosted on the class server. One night, without your knowledge, your partner adds a backdoor (a secret piece of code allowing remote control of the project) to the project repository. However, you do not realize this until after the project is turned in. How can you show (with reasonable certainty) that you did not add the back door to the project? List the specific commands you would use and what useful information they would provide.
+
+Skipped. We use git, not SVN. 
+
+7. In 2009 an attack on SSL (Secure Socket Layer) Certificates was published online that allowed spoofing of domain names. This attack allowed a malicious site to publish valid security certificates which appeared to be for a different site. For example, www.goodsite.com.evilsite.com (a subdomain of evilisite.com) would claim to be www.goodsite.com by having a non-printable null character (“www.goodsite.com\0.evilsite.com”) in its name. Given that every domain name is exactly 32 characters (with null bytes on the end when less than 32 characters are used), eliminate this spoofing vulnerability from the following function:
+
+This is the correct version of the function:
+
+int isValideForSite (char * domainName, char * certificateDomainName) {
+	return (strlen(*domainName) == strlen(*certificateDomainName) && strcmp(domainName, certificateDomainName);
+}
+
+8. SSH is a widely used network protocol that allows for secure (in most typical situations) communication between two systems. SSH allows for both Public Key (where a client’s public key is stored on the host) and Password based authentication which you saw in Lab 7. List a set of circumstances where Public Key authentication would be the most secure method and a set of circumstances where Password based authentication would be the most secure:
+
+In general, public key authentication is safer when you can assure that no one has the physical access to
+your private key. Password based authentication would be safer in circumstances in which the private key can be accessed by physical means. 
+
+### Additional ###
+Passwords are sent to server before verified, so the safety of it is relative to how well the server protects the transmission.
+
+
+9. Which of the following bash commands would be most appropriate to compile a project and print a one line summary of the build status? Justify your answer by critiquing all three commands.
+
+a. make || echo “Build failed!” && echo “Build succeeded”
+If make succeeds, "Build succeeded" would never be echoed. If make fails, both "Build failed" and "Build succeeded" would be echoed. Not a good command to use.
+
+b. make && echo “Build succeeded” || echo “Build failed!”
+Works perfectly. 
+
+Right side of && only gets evaluated if exit status of left side is 0
+.. || .. non-zero
+
+c. make || echo “Build succeeded” && echo “Build failed!”
+If make successes, no message is printed. If make fails, both message would be printed. Not a good command to use. 
+
+10. Write a sed command that replaces every phone number in ./contact.html with its digit-only form. The format to consider is (ddd)-ddd-dddd. For example, (555)-555-5555 becomes 5555555555. Ignore phone numbers formatted incorrectly (for example, too many digits).
+
+sed "s/[\(\)-]//g" < input
+
+11. You have a file called one_mb which is exactly 1 megabyte in size. You want to create from it a file of exactly 128 megabytes in size. Please write a shell script to do this with at most 9 lines and no loops, if statements, recursion, or any other logic control structures. Each command, including parameters, must be less than 100 characters in length.
+
+The only way I can think of without using some sorts of loop or control flow is:
+
+cat one_mb one_mb > two_mb
+cat two_mb two_mb > 4_mb
+cat 4_mb 4_mb > 8_mb
+cat 8_mb 8_mb > 16_mb
+cat 16_mb 16_mb > 32_mb
+cat 32_mb 32_mb > 64_mb
+cat 64_mb 64_mb > 128_mb 
+
+12. 
+
+a) 
+
+class Point3:
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.z = 0
+
+    def distance2(self, the_argument):
+        dx = the_argument.x
+        dy = the_argument.y
+        dz = the_argument.z
+        return (self.x - dx) ** 2 + (self.y - dy) ** 2 + (self.z - dz) ** 2
+
+b) 
+
+def createCoordinate(path = "points.txt"):
+    array = []
+    with open(path, 'r') as f:
+        while True:
+            x = f.read(1)
+            y = f.read(1)
+            z = f.read(1)
+            if not z:
+                break
+            point = Point3()
+            point.x = x
+            point.y = y
+            point.z = z
+            array.append(point)
+    
+    f.close()
+    return array
+
+c)
+
+def boundingSphere (array):
+    center = array[0]
+    dist = 0
+    for point in array[1:]:
+        if center.distance2(point) > dist:
+            dist = center.distance2(point)
+    print("The coordinate of the center is" + center.x + center.y + center.z + "the radius is" + dist)
+
+13. The following C function counts the number of unique positive integer divisors a given number n has (not including 1 or n). For example, if the number 12 is given the function will return 4 since 12 can be divided by 2, 3, 4, and 6. Speed up this function by parallelizing it and doing all work in 3 child threads. Use pthread_create and pthread_join to manage your threads. You may add additional functions and global variables if needed. Do not attempt to improve the algorithm (i.e. still use an exhaustive search). You may assume that all operations are atomic, meaning you can perform operations such as g_divisorCount++ without worrying about synchronization.
+
+The correct function is as follows:
+
+#include <pthread.h>
+#include <stdio.h>
+
+#define NUM_ELEMENTS 4000000000
+#define NUM_THREADS 4
+int a[NUM_ELEMENTS];
+
+pthread_t th[NUM_THREADS-1];
+
+struct info{
+  int id;
+  int interval;
+  int res;
+};
+
+void* t(void* arg)
+{
+  int thread_num=(int)arg;
+  int i=0;
+  int step=NUM_ELEMENTS/NUM_THREADS;
+  int start=step*thread_num;
+  int end=start+step;
+}
+int main(void)
+{
+  int i;
+  for(i=0;i<NUM_THREADS-1;i++)
+    pthread_create(&th[i],NULL,t,(void *) i);
+
+  t((void*)0);
+  for(i=0;i<NUM_THREADS-1;i++)
+    pthread_join(th[i],NULL);
+
+}
+
+

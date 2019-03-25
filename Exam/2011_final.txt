@@ -1,0 +1,206 @@
+CS35L 2011 Final
+
+Problem 1
+1) If I don't know the exact solution, I will use the command apropos to search for keywords in the man pages. To be specific, I'll do $apropos directory because directory seems to be the most related terms. When I get a list of several commands to look into, I will use the man page to look at each of them, read the description of each command, and see the possible options that might be useful to solve this question.
+
+2)
+
+^def [A-Za-z_][A-Za-z_0-9]*\([A-Za-z_][A-Za-z_0-9]*):$
+
+Some explanations:
+
+^ means we want to match from the beginning of the text.
+[A-Za-z_] means all letters and underscore
+[A-Za-z_0-9] means all letters, digits, and underscores
+\( and \) are necessary because we have to remove their special meanings
+$ means we want to match at the end of the text.
+
+3)
+
+Me ----> Bob
+
+Before I send anything to Bob, I will use my private key to sign the document, meaning that a signature will be generated using my private key. Depending on the types of the signatures, there will be either one or several output files. For example, when I choose to use detached signature, there will be the original file I want to send to Bob, and a signature file created by me certifying that I initiate the conversation at a specific time. If the file is tampered somehow, Bob will find out when verifying the signature using my public key. I then use Bob's public key to encrypt the message. Bob then uses his private key to decrypt the files. Again, I use my private key to generate the signature, and Bob uses my public key to verify the signature.
+
+Problem 2
+which tool you will use, specific commands, what the tool does, reasoning
+1)
+
+/projects/team-1/
+
+For "Contact.txt", teammates in the group, teammates should be able to read and write (rw-), corresponding to permission bit 6 for the group. For other people in the class, they only need the read access, so for others, r-- is enough, which corresponds to 4. For me, since this is a txt file, we don't want to make it a executable, so i will only give myself rw- which corresponds to 6. Therefore, we should use the command
+$chmod 664 Contact.txt
+to grant corresponding privilege to different groups of users. One thing to take care of is to make sure the file "Contact.txt" actually belongs to the group. If not, we can use the command $chgrp team Contact.txt to change group ownership.
+
+For "README.txt", I assume it should be written by me, so I should have the rw- access, corresponding to permission bit 6. For group and others, only r-- is needed, corresponding to 4. Therefore, we will use the command $chmod 644 README.txt.
+
+For "MeetingNotes.txt", we will use the command $chmod 660 MeetingNotes.txt
+
+2)
+Since we believe that the bug was introduced at some time in the past week, we want to take a look at the commit logs. To do that, we use the command $git log, and we will get the specific information of each commit, including time, author(s), and the description of the commit. We can then use the git blame command to see what changes were made, and who made the changes. It would also be helpful if we can use a GUI. For example, if the project is hosted on GitHub, we can see the repo network to visualize the commits and changes to files (similar to the output by diff, but with colors, easier for human to read)
+
+We can also use Git diff to compare between commits, to understand what is being changed.
+ 
+To debug the code, we can use gdb. Commands for debugging:
+step: execute one line and stop before next line
+next: Similar; if next line is a function call, execute the entire function
+until: Similar; jump loops and functions
+
+3)
+After I fix it, I will use the command $git diff to make a diff file between the files in the working stage and the file from the last commit. I'll do that before I commit the modified code to the repo. After they approve it, I will then use $git add foo.c and $git commit -m "bug in foo.c fixed" to commit the changes to the repo, and use $git push to push the changes to the remote server.
+
+OR
+
+I can create a commit for the fix first in my own branch, and use
+$ git format-patch -1 HEAD > diff.txt
+To create patch. When it is approved, we use git merge to merge the content. 
+
+Problem 3
+1)
+two arguments of school names; 0 means s1 > s2, vice versa.
+
+commands needed (listed below)
+
+#!/bin/bash
+SCHOOL1=$(cat nba.txt | grep $1 | wc -l)
+SCHOOL2=$(cat nba.txt | grep $2 | wc -l)
+
+if (( $SCHOOL1 > $SCHOOL2 )); then
+   exit 0
+else
+   exit 1
+fi
+
+2)
+cat nba.txt | grep -E "(<[^>]*>/?){2,}" | wc -l
+
+3)
+.
+       -k, --key=KEYDEF
+              sort via a key; KEYDEF gives location and type
+
+KEYDEF is F[.C][OPTS][,F[.C][OPTS]] for start and stop position, where F is a field num‐
+       ber and C a character position in the field; both are origin 1, and  the  stop  position
+       defaults  to  the  line's end.  If neither -t nor -b is in effect, characters in a field
+       are counted from the beginning of the preceding whitespace.  OPTS is one  or  more  sin‐
+       gle-letter  ordering  options  [bdfgiMhnRrV], which override global ordering options for
+       that key.  If no key is given, use the entire line as the key.  Use --debug to  diagnose
+       incorrect key usage.
+
+therefore, use sort -k5 -r
+pts per game, mins per game, draft year, name of the player
+
+Then use $awk '{print $4, $5, $6, $7, $8}', this command only prints from the 4th column to the 8th column, eliminating the first four columns.
+
+Therefore, the command should be
+sort -k5 -r | awk '{print for (i=4;i<=8;i++)print $i}'
+
+
+Problem 4
+1)
+lottery.py
+
+"guest-emails.txt"
+
+johnsmith@ucla.edu	John Smith
+
+
+f = open(filename, 'r')
+for line in f.readlines():
+    #TODO parse each line into tuples
+    index_tab = line.find("    ")
+    tu = (line[0:index_tab], line[index_tab + 1:])
+    tuples.append(tu)
+def print_message(tup):
+    print "Congratulation, {0}! You won the lottery! Our secret gift has been sent to your email: {1}".format(tup[0], tup[1])
+
+
+def main():
+    if(len(sys.argv) > 2): # argv[0] is the file name
+    		     print "Too Many arguments"
+
+#TODO complete the main function
+      if (len(sys.argv) == 1):
+      	 people = read_tuples("guest-emails.txt")
+      else:
+	 people = read_tuples(sys.argv[1])
+
+
+      winner = random_pick(people)
+      print_message(winner)
+
+2)
+User input is always dangerous. The attackers can write some SQL commands as the username, and the python program will concatenate the command to the sql query, which allows the attacker to query information he is not authorized to request. We can prevent this incident by adding some senity checks on the user data. For example, if there are any special characters in the string, we will deny the request and don't make the databse query.
+
+3) We used the stack protector of gcc, known as -fstack-protector. Such operations cause some performance overhead, since extra code will be added to check for buffer overflows, such as stack smashing attacks. This is done by adding a guard variable to functions with vulnerable objects. This includes functions that call alloca, and functions with buffers larger than 8 bytes.
+
+4)
+#visiting count, http access log
+
+
+Since our array's index is url_from_log[j], we will partiton n into eight 8/n concurrent threads
+
+/* Count the occurrences of urls in url_from_log
+ * url_list is the list of candidate urls you need to count
+ * counters[i] indicates the occurrence of url_list[i]
+ * m and n is the size of url_list and url_from_log
+ * correspondingly
+ /
+
+void count_urls(char** url_list, int m,
+                char** url_from_log, int n,
+		int* counters) {
+	int i, j;
+	for (i = 0; i < m; i++) {
+ 	    for (j = 0; j < n; j++) {
+	    	if (strcmp(url_list[i], url_from_log[j]) == 0)
+		   counters[j]++;
+	    }
+	}
+}
+
+
+
+Modified version:
+#include <pthread.h>
+
+static int* counters_ptr_global;
+
+struct tparam {
+     int start;
+     int end;
+};
+
+typedef struct tparam Tparam;
+
+void* thread(void* vargp) { /* Thread routine */
+       Tparam* param = (Tparam*)(vargp);
+       int start = param->start;
+       int end = param->end;
+       
+       for (int j = start; j <= end; j++) {
+      	  if (strcmp(url_list[i], url_from_log[j]) == 0)
+	     counters_ptr_global[j]++;
+	  }
+       return NULL;
+}
+
+
+void count_urls(char** url_list, int m,
+                char** url_from_log, int n,
+		int* counters) {
+	counters_ptr_global = counters;
+	int i, j;
+	pthread_t tids[8];
+        for (i = 0; i < m; i++)	{
+            for (j = 0; j < 8; j++) {
+	        Tparam param;
+		param->start = j * 8;
+		param->end = j * 9 > n ? n : j * 9;
+                pthread_create(&tids, NULL, thread,(void*)(&param))
+            }
+
+            for (int i = 0; i < 8; i++) {
+            	 pthread_join(tids[i], NULL);
+            }
+        }
+}

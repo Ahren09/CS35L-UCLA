@@ -1,0 +1,273 @@
+1.
+(a|b)* is same as (a*b*)*
+
+
+a|ba is NOT same as (a|b)a
+
+a|ba: a, ba
+(a|b)a: aa, ba
+
+
+(ab|a)*a a(ba|a)* are same
+
+(ab|a)*a: aba, abababa, a, aaaaa
+a(ba|a)*: aba, ababababa, a, aaaaa
+
+2.Use of the $PATH environment variable
+$PATH specifies the directories in which executable programs are located on the machine that can be started without knowing and typing the whole path to the file on the command line.
+
+PS: How to add PATH:
+export PATH=$PATH:/user/Desktop/.......
+However, PATH is gone when you restart the program
+
+3.
+You do not have the execution permission of buildwords.sh
+chmod 755 buildwords.sh
+OR: chmod u+x
+so that everyone can read and execute this file
+
+4.
+
+CC = gcc
+make: srot.c
+      $(CC) srot.c -o srot
+
+clean:
+	rm srot
+
+5.
+#!/bin/bash
+if gcc --version | grep -F “4.7.2”
+then
+	echo ‘CC = gcc’ > Makefile
+	echo ’srot: srot.o’ >> Makefile
+	echo ‘\t$(CC) -o srot srot.c’ >> Makefile
+	echo ‘clean:’ >> Makefile
+	echo ‘\trm srot.o srot’ >> Makefile
+else 
+	echo ‘This software requires gcc 4.7.2 version'
+fi
+
+6.
+From Guangyu Zhou's lecture slide:
+System calls are special type of function that:
+Used by user-level processes to request a service from the kernel
+Changes CPU's mode from user mode to kernel mode to enable more capabilities
+Is part of the kernel of OS
+Verifies that the user should be allowed to do the requested action and then does the action (kernel performs the operation on behalf of the user)
+Is the only way a user program can perform privileged operations
+
+A process can be authorized to perform dangerous operations via system calls If the kernel code does NOT perform all required safety check
+
+7.
+write() is a system call that slows the function significantly
+
+8.
+float ***M;
+int i,j,k;
+M=(float ***) malloc (sizeof(float **) * 100);
+for(i=0;i<200;i++)
+{
+	M[i]=(float **)malloc (sizeof(float *)*200);
+	for(j=0;j<300;j++)
+	{
+		M[i][j]=(float *) malloc(sizeof(float)*300);
+	}
+}
+
+for(i=0;i<200;i++)
+{
+	for(j=0;j<300;j++)
+	{
+		free(M[i][j]);
+	}
+	free(M[i]);
+}
+free(M);
+
+9.
+Log in as root
+
+Add user:
+useradd <USERNAME>
+Set password:
+passwd <USERNAME>
+
+After this the new user's entry is stored in ‘/etc/passwd‘ file
+
+By default 'useradd' command creates a user's home directory under /home
+To specify the home directory of creating this user:
+useradd -d /some/NewDirectory <USERNAME>
+Then the directory is created inside NewDirectory
+
+For Alice:
+To login, type:
+ssh <YOUR_USERNAME@lnxsrv01.seas.ucla.edu>
+
+To run an application, simply type the name of the application:
+firefox 
+
+10.
+Let Bob generate an ssh key pair and send his public key to Alice so that Alice can use it to encrypt the secret document. A file encrypted with public key can only be decrypted with private key, so only Bob can decrypt the file.
+
+If Bob does not have a keypair, let him generate an ssh key pair:
+ssh-keygen
+First specify the file to store the key (default: ~/.ssh/id_rsa)
+NOTICE that if we do NOT use the default location, we need to specify the absolute path: /u/cs/ugrad/me/someFile instead of ~/someFile !!
+
+Then set the name and passphrase for the key
+
+now the *.pub file is generated in the corresponding directory, Bob can share this with anyone who want to send him secret documents
+
+11.
+#!/bin/bash                                                                             
+cat $1|grep real|grep -Po "(?<=m).*(?=\.)"
+
+12.
+Potential buffer overflow
+The function may overrun the buffer's boundary and overwrite adjacent memory locations
+ data is put in a fixed-length buffer
+
+If the function does not check array bounds, attackers simply supply an input with length greater than buffer can hold.
+
+13.
+float Distance(Point3D a, Point3D b) 
+{
+	//Returns the distance between 2 points
+	
+	return sqrt(pow(a.X – b.X, 2) + pow(a.Y – b.Y, 2) 
+	+ pow(a.Z – b.Z, 2));
+}
+
+int CompareSpheres(void *r1, void *r2) {
+    return(*(struct Sphere*)r2->radius) - (*(struct Sphere*)r1-radius);
+}
+
+int main()
+{
+	//...
+	qsort(s,SPHERE_COUNT,sizeof(Sphere),CompareSpheres);
+}
+
+14.
+An exception is an error that happens during execution of a program.
+When the error occurs, python generate an exception that can be handled, which avoids your program from crashing
+A finally clause is optional and is executed before leaving the try statement
+
+
+Python:
+
+exceptions are caught in try blocks and handled in except blocks.
+If an error is encountered, a try block code execution is stopped and 
+transferred down to the except block
+
+
+try:
+	print 1/0
+except ZeroDivisionError:
+	print "Error: Division by zero"
+finally:
+	print "End of program"
+
+
+
+
+PS: In C:
+if(!fopen(filename)
+{
+	fprintf(stderr, "Error: cannot open file!")
+}
+
+15.
+An examined solution tested by lnxsrv09:
+
+import sys
+def translatePhoneNum(phone_num):
+    s=""
+    for c in phone_num:
+        if c in "ABC":
+            s+='2'
+        elif c in "DEF":
+            s+='3'
+        elif c in "GHI":
+            s+='4'
+        elif c in "JKL":
+            s+='5'
+        elif c in "MNO":
+            s+='6'
+        elif c in "PQRS":
+            s+='7'
+        elif c in "TUV":
+            s+='8'
+        elif c in "WXYZ":
+            s+='9'
+        else:
+            break
+    return s
+
+
+if __name__=="__main__":
+    if(len(sys.argv)!=2):
+        print "Error: Invalid number of arguments!"
+        sys.exit(1)
+    filename=sys.argv[1]
+
+    validPhones=set()
+    f=open(filename,'r')
+    content=f.readlines()
+    for line in content:
+        phone_num=translatePhoneNum(line)
+        #Input line has different size from output phone number                
+        #subtract 1 because readline() reads a line and append a '\n'          
+        if(len(phone_num)!=len(line)-1):
+            continue
+        else:
+            validPhones.add(phone_num)
+
+    for n in validPhones:
+        print n
+
+16.
+Benefits of using VCS:
+
+Have a backup of files by storing older versions
+Ability to restore previous versions
+
+Files are shared among multiple computers
+Everyone in a dev team has an independent version of source code, thus can work
+independently
+Thus developers can work in parallel
+
+Copy/Merge/Undo changes
+
+Tagging and branching
+
+Maintaining multiple versions of code
+	
+
+17.
+Benefits of DVCS over CVCS
+Perform actions when working offline:
+	Committing new changesets can be done locally
+	Everything but pushing and pulling can be done without an 
+	internet connection
+
+Faster speed: only needs to access the hard drive, not a remote server.
+
+Easy merging and branching
+
+18.
+a) git status
+
+b)
+First, run "git add FILE", where "FILE" is the name of file(s) you want to commit
+Or run "git add ." to add all files under the current repository
+
+Second, run "git commit -m "COMMIT_MESSAGE" ", where the quoted "COMMIT_MESSAGE"
+is the commit message you write
+
+c)
+Use the commit's SHA hash (or "commit id")
+Run "git log" to get the SHA of this commit
+
+

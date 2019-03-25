@@ -1,0 +1,38 @@
+If you have problems connecting to the lab wifi through the web page, 
+you can also connect your board to the lab wifi through command lines:
+
+Make sure you are logged into the BeagleBone as root and then do:
+
+$connmanctl
+
+Turn on the wifi for your BeagleBone:
+
+connmanctl> enable wifi
+
+Scan all available wifi access points:
+
+connmanctl> scan wifi
+
+List all the discovered access points:
+
+connmanctl> services
+
+The access point you will connect to will look something like this:
+
+CR3760-wifi wifi_506583d4fc5e_544e434150413937414239_managed_psk
+
+Register as the prospective client:
+
+connmanctl> agent on
+
+After you locate the access point you want to connect to, use the string next to the name of the access point as the input to the following command:
+
+connmanctl> connect wifi_506583d4fc5e_544e434150413937414239_managed_psk
+
+If the access point requires a wifi password, enter the password after "Passphrase?":
+
+Passphrase? 3760ClassNet
+
+Now you are connected to the wifi so close the application connmanctl:
+
+connmanctl> quit

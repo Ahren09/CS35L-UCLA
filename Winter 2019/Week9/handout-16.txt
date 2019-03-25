@@ -1,0 +1,122 @@
+1. Additional Keywords in regular Expression
+
++	repeat 1 to any times of the previous pattern 
+	e.g. a+b matches ab, aab, aaab ...
+	
+?	repeat 0 or 1 time of the previous pattern
+	e.g. a?b matches b, or ab 
+	
+()	allows you to apply quantifiers to a group of strings
+	e.g. (ab)+ matches ab, abab, ababab, ...
+	
+
+2. Basic Regular Expression vs Extended regular expression
+
+	In basic regular expression, ?, +, {, }, (, ) lose their 
+	special meaning. They are treated as literal value. 
+	
+	To use the special values of these key words, put \ in front 
+	of it. e.g. grep "a\+b"
+	
+	
+	In extended regular expression, the special values of the key words 
+	are preserved. 
+	
+	Basic regular expression is the default mode for most Linux commands 
+	(e.g. grep and sed)
+	
+	To use the extended regular expression, a special option is needed 
+	to pass to the commands. (e.g. For grep, it is the -E option)
+	
+	For example, the below two commands are the same. 
+	
+	grep "a\+b" # Use basic regular expression, preserve the meaning of keyword +
+	grep -E "a+b" # Use the extended regular expression. 
+	
+3. g++
+
+	g++ is the compiler for C++ programming language (gcc is the compiler for C 
+	programming language). The options to g++ is the same as gcc. The only
+	difference is g++ compiles C++ programs while gcc compiles C programs. 
+	
+3. git clean 
+
+	git clean commands remove all the untracked files under the git directory. 
+	
+	e.g.
+	
+	$ls 
+	main.c Makefile exec
+	
+	$git init 
+	
+	$git add main.c Makefile #The exec file is not tracked. 
+
+	$git commit -m "Initial commit" 
+	
+	$git clean #This will remove the exec file. 
+	
+4. git tag -a 
+
+	There are two types of tagging in git: lightweight tagging 
+	and annotated tagging. 
+	
+	The only difference is the annotated tagging will insert additional messages 
+	(e.g. tagger name, email, and date and a tagging message) while lightweight 
+	tagging will not. 
+	
+	e.g. 
+	
+	git tag -a v1.0 a1cef... -m "This is the tagging message" 
+	git tag v1.0-light a1cef... 
+	#create annotated tagging (v1.0) and lightweight tagging 
+	#(v1.0-light) on the same commit 
+	
+	git show v1.0 #Shows the additional message for annotated tagging 
+
+	tag v1.0 
+	Tagger: root <root@localhost.localdomain>
+	Date: Fri Mar 15 19:20:05 2019 -0700
+	
+	This is the tagging message 
+	
+	.....
+	
+	git show v1.0-light #Only commit information, no tagging information. 
+	
+5. git fetch 
+
+   git fetch, when used together with git merge, allows you to update the 
+   changes of a remote repository to the local repository. 
+   
+   For example, under directory /root/git/, there is a git repository 
+   contains only one file: hello. 
+   
+   You do a git clone to clone the remote repository /root/git to your 
+   current directory (Say /home/user/)
+   
+   git clone /root/git 
+   
+   Now there is two identical repository. One is called the remote repository 
+   (/root/git). The other is the local repository (/home/user/git/) 
+   
+   Suppose the remote directory updates: 
+   
+   $pwd 
+   /root/git
+   
+   $echo "Add a new line" >> hello 
+   $git add hello
+   $git commit -m "Add a new line". 
+   
+   To reflect such a change to the local repository:
+   
+   $pwd 
+   /home/user/git/ 
+   
+   $git fetch 
+   $git merge origin/master  #This will update the local repository	
+							 #to reflect changes in the remote repository. 
+   
+   
+	

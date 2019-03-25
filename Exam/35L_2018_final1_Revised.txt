@@ -1,0 +1,96 @@
+35L 2018 Final 1
+
+Q3
+#!/bin/bash
+Mkdir mylab
+result=$(find . -maxdepth 1 -mindepth 1 -type f | sort)
+for file in $result
+Do
+ cp $file mylar/$file
+Done
+echo “CS 35L final exam” > mylab/new_file.txt
+echo $result | head -1 >> mylab/new_file.txt
+
+#Another solution (if we only copy files but not directories)
+
+#!/bin/bash                                                                    
+mkdir mylab
+cp * mylab
+echo "CS 35L Final Exam" >mylab/new_file.txt
+ls mylab|sort|head -1 >>mylab/new_file.txt
+
+Q4
+Public broadcasting(1 to n), avoid tampering: private key to encrypt
+Secure communication(n to 1): public key to encrypt, only private key can decrypt
+
+Q5
+man -k [keyword]
+man -K [keyword] 
+Regex can be turned on using -ew after -k, 
+man -k -ew [regex]
+
+Q7
+last|cut -d " " -f 1|sort|uniq -c|sort -n |tail -1
+The result is like:
+360 das
+
+
+Q8 
+255 characters
+//PS: Maximum path length: 4096 chars
+
+Q10
+Make -j 2 means 
+A) two jobs will run simultaneously
+
+Q13 c git checkout -b mybranch
+
+Q12
+Differences between hard/soft links
+A soft link does not contain the data in the target file
+A hard link preserves the contents of the file
+
+A soft link points to another entry somewhere in the file system.
+A soft link can link to directories, or to files on remote computers networked through NFS
+
+Deleting a file will invalidate the softlink pointing to that file, whereas hardlink
+remains unchanged
+
+Q13
+#!/bin/bash                                                                     
+
+a=$1
+b=$2
+a=`expr $a + $b`
+b=`expr $a - $b`
+a=`expr $a - $b`
+
+Q14
+root is the user that has access to all commands and files on a Linux or Unix-like OS
+root has ability to modify the system in any way and to grant and revoke access
+permissions  (the ability to read, modify and execute specific files and directories) for other users
+
+Q15
+a. M-w
+b. C-y
+c. M-y
+d. C-x u
+
+Q16 b
+find . -name “a.*[0-9]#.html" -maxdepth 1
+OR: find . -name a*[0-9]\#
+
+Q16c
+sed -i old ’s/\//,/g’
+
+Q17
+Critical section is the section that cannot be parallelized
+
+Q19
+Disadvantages:
+It may have lower performance, 
+And the dynamically loaded library may be missing.
+
+Q20
+In most cases, it is faster to use buffered IO, especially when we are reading or writing a small part at a time. 
+When each read and write is already large enough, we can directly use unbuffered IO with system call, and eliminate the overhead the the buffers.

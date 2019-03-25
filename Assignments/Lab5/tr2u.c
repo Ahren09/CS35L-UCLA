@@ -44,11 +44,11 @@ int main(int argc, const char * argv[]) {
         exit(1);
     }
     
-    int i=0;
+    int i=0, j=0;
     //Check: duplicate bytes
     for(i=0;i<len1;i++)
     {
-        for(int j=i+1;j<len1;j++)
+        for(j=i+1;j<len1;j++)
         {
             if(from[i]==from[j])
             {
@@ -61,24 +61,16 @@ int main(int argc, const char * argv[]) {
     
     char c; //Indicates currently read char
     
-    ssize_t ret;
     //While not reaching the end of file
     //a positive value indicates that position is not at EOF
     while(true)
     {
         //Check IO
-        ret = read(STDIN_FILENO,&c,1);
-        
-        //ret<0 means failed read
-        if(ret<0)
+        if(read(STDIN_FILENO,&c,1)<=0)
         {
             fprintf(stderr, "Error: Input failure");
             exit(1);
         }
-        
-        //ret=0 means end of file
-        else if(ret == 0)
-            break;
         
         for(i=0;i<len1;i++)
         {
@@ -90,15 +82,12 @@ int main(int argc, const char * argv[]) {
             }
         }
         
-        //ret<0 means failed write
         if(write(STDOUT_FILENO,&c,1)<0)
         {
             fprintf(stderr, "Error: Output failure");
             exit(1);
         }
     }
-    
-    
     return 0;
     
 }

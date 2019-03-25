@@ -1,0 +1,108 @@
+1. ssh command:
+	ssh commands allow you to log into a remote machine via network
+
+	e.g.
+	
+	ssh lnxsrv09.seas.ucla.edu 
+	ssh 192.168.1.1 #specify remote machine by using its ip address
+
+	By default, ssh will use your current user name to log into the 
+	remote machine. 
+	
+	To specify a different user name, use @ or -l option
+	
+	e.g. 
+	
+	ssh zhou@lnxsrv09.seas.ucla.edu
+	
+	or 
+	
+	ssh lnxsrv09.seas.ucla.edu -l zhou
+	
+	
+	-X option allows ssh to forward the graphics display of the remote machine.
+	
+	Use ssh -X to log into lnxsrv09 and then invokes emacs. 
+	
+	You should be able to see the GUI of emacs. 
+
+2. scp command:
+
+	scp commands are able to exchange files with remote machines. 
+	
+	scp command syntax:
+	scp source destination
+
+	scp zhou@lnxsrv09.seas.ucla.edu:~/hw/foo /var/tmp/
+	#copy the remote file ~/hw/foo on lnxsrv09 to the /var/tmp/ 
+	directory of local computer
+	
+	scp /usr/bin/ls zhou@lnxsrv09.seas.ucla.edu:/var/tmp 
+	#copy the local file /usr/bin/ls to the /var/tmp/ directory of the 
+	remote lnxsrv09 machine 
+	
+3. useradd command:
+	create a user on the computer. 	Only root user can execute
+	
+	e.g.
+	useradd foo  # adds a new user foo on the computer
+
+4. passwd command:
+	change the passwd of a user
+	
+	e.g.
+	passwd #change the passwd for the current user
+
+	passwd foo #change the passwd for user foo, only root can execute
+
+5. chown command:
+	change the owner of a file. Only root user can execute
+	chown foo /var/tmp/bar 
+	
+6. hostname command
+	
+	Display the name of the machine
+	
+	hostname # shows the name of the machine
+	
+	hostname myMachine # changes the name of the machine to be myMachine, 
+						 only root user can execute
+
+7.	ssh login without passwd
+
+	ssh-keygen # This command will generate the public/private key pair. 
+			   # It will also ask for a passphrase to encrypt the private key. 
+			   
+	
+	ssh-copy-id #This command copies the public key to the remote server
+	
+	e.g.
+	
+	ssh-copy-id user_name@lnxsrv09.seas.ucla.edu
+	
+	Now, if you do ssh user_name@lnxsrv09.seas.ucla.edu, you will be prompted 
+	to enter the passphase generated in ssh-keygen. 
+	You will not need to enter your passwd on lnxsrv09. 
+	
+8. ssh agent
+
+	A simple program to remember the passphrase of private keys for you
+	
+	To use it:
+	eval `ssh-agent` #This command creates ssh-agent
+	ssh-add 	     #This command will ask for your
+					 passphrase and stores it in ssh agent 
+					 
+	After invoke SSH agent, you can log into the remote machine without 
+	entering any password/passphrase at all. 
+	
+9. Complete command list to log in without using passwd:
+
+	ssh-keygen 
+	ssh-copy-id user_name@remote_server
+	eval `ssh-agent`
+	ssh-add 
+	
+	Now you should be able able to log into the remote_server as user_name 
+	without using password/passphrase at all.
+	

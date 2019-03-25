@@ -1,0 +1,25 @@
+
+The resulting network is still secure. Although public key is visible to them,
+the private key is still securely stored. Other teams have no way to find the 
+private key in order to decrypt messages of my team.
+
+(1)
+Still secure. The generation of keys are not related to keyboard activities.
+Even though the other teams record our keystrokes, they cannot find out our 
+private key since even the same passphrase will generate different private key
+ during the second time.
+
+(2)
+If system files are all in the USB, then they not only have public key, but
+also have direct access to the private key, and can use the key pair to decrypt
+all of our data transmission and log into our hosts.
+
+2.
+The program verifies whether the the target file and the detached
+signatures match or not. "--verify" only checks correctness of its signature.
+It does not contains any info about the owner or creator.
+
+I can post my public key on the web so that anyone who download my files can
+verify whether the files are created by me and whether they are modified.
+I can rely on a third-party such as a CA to send our public keys securely.
+Therefore, the receiver can make sure they have the right key to verify.

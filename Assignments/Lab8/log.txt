@@ -1,0 +1,69 @@
+1.
+I first connect the Beaglebone to the lab wifi and ssh to it via:
+ssh root@192.168.8.1
+
+Since OpenSSH is already installed,
+all I need is to install the xauth and xterm for later tasks:
+apt-get install xauth
+apt-get	install	xterm
+
+2.
+Set up a unique hostname for my board:
+hostname ahren
+
+"ahren" is the hostname I set
+
+Create a new non-root user on my board:
+useradd ahren
+
+And change the password of the new user "ahren" by:
+passwd ahren
+
+Then a new user is created on my board.
+
+I create a home directory for the new user before logging out from root:
+mkdir /home/ahren
+
+3.
+I run "ifconfig" to get the ip address of my board, which will be used by my 
+partner to log onto my board.
+
+My ip address is 10.97.85.26 
+
+By the same token, I get my partner Danny's ip address: 10.97.85.31
+
+4.
+Logging in without password
+
+First I generate a key pair by:
+ssh key-gen
+
+To allow my partner log into my BBB, I create an ".ssh" directory 
+cd /home/ahren
+mkdir .ssh
+
+I copy the generated key on my partner's host
+On Danny's host:
+ssh-copy-id -i ahren@10.97.85.26
+I type yes for the poped up question and type in my password to log in
+and exited.
+
+I used "eval `ssh-agent`" to output the environment variables for connection
+I use this command to copy the key:
+ssh-add
+I typed in the public key
+
+Then I type "ssh ahren@10.97.85.26"
+It does not require me to type in password for logging in
+
+4.
+Test SSH for Password Authentication
+
+I log onto my partner's BBB through my host
+ssh -X danny@10.97.85.31
+
+then I typed xterm
+
+An xterm shell window pops up
+
+The steps also works on Danny's host

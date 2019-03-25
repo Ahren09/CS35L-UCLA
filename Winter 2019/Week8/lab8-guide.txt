@@ -1,0 +1,75 @@
+lab spec:
+
+1. Find out your partener. The lab is done in a group of two people.  
+
+2. Follow the "Connect your BBG Wireless and your computer via Wi-Fi" 
+   instruction on BeagleBone spec to 
+
+	1. connect your beaglebone to the lab WiFi: CR3760-wifi, 
+	password is 3760ClassNet
+	2. ssh to your beaglebone as root via ssh root@192.168.8.1
+	
+3.  You will notice that you are not asked for a password to log in, this is 
+	dangerous as other people can log into your board as root without knowing 
+	your password. 
+	
+	Setup the password for root user. 
+
+4.  Install xauth and xterm by typing
+
+	apt-get install xauth  #xauth is needed for ssh -X option to work
+	apt-get install xterm
+
+5.	To avoid confusion, 
+
+	setup a unique hostname for your board. 
+	
+	Make sure the hostname on your board is different the one on your 
+	partener's board.  
+	
+	In the following parts of the lab, if you are not sure whether you're 
+	currently in your board or in your partener's board, use the hostname 
+	command to figure it out. 
+
+6. Now let both your partener and your board connected to the lab Wi-Fi. 
+
+7. SSh into your partener's board with user root. 
+
+	To do this you need to know the ip address of your partener's board. 
+	Run the ifconfig command on your partener's board. 
+	The inet addr in the wlan0 section shows the ip address of your 
+	partener's board. 
+	
+	Your partener will also need to tell you the root password on his/her 
+	board. 
+	
+	Help your partener to log into your board as well. 
+
+8. log out from your partener's board. 
+	
+	Now you need to create a non-root user account for 
+	your partener to log in. 
+	
+	Do this by using useradd and passwd command. 
+	
+	You also need to make a home directory for the new user. 
+	Do this by using mkdir /home/new_user_name. And then invoke chown 
+	command to change the owner of the home directory to the newly created
+	user. 
+
+9. 	ssh into your partener's board with the newly created user account
+	and help your partener to do the same thing. 
+
+10. Use the ssh* command to allow you to ssh to your partener's board 
+	without typing any password/passphase. Help your partener to do the 
+	same thing. 
+	
+11. Close all the terminals connected to BBG. 
+	Now ssh to your beaglebone with -X option and then from your beaglebone 
+	to ssh into your partener's beaglebone with -X option. 
+	
+	invoke xterm command on your partener's board with your ssh session.
+	You should be able to see a shell window on your host
+
+12. That's all for the lab! Start writing your lab report and consider 
+	selling your board to get your 50 bucks back (Joke). 

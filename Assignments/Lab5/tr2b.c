@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 typedef enum{false=0,true=!false} bool;
 
 //Check IO
@@ -28,8 +27,8 @@ int main(int argc, const char * argv[]) {
     
     //Initialize from and to
     const char* from=argv[1], *to=argv[2];
-    size_t len1=strlen(from);
-    size_t len2=strlen(to);
+    int len1=strlen(argv[1]);
+    int len2=strlen(argv[2]);
     
     //Check: Length = 0
     if(len1 == 0 || len2 == 0)
@@ -45,15 +44,11 @@ int main(int argc, const char * argv[]) {
         exit(1);
     }
     
-    int i=0;
-    
-
-     
+    int i=0,j=0;
     //Check: duplicate bytes
-    
     for(i=0;i<len1;i++)
     {
-        for(int j=i+1;j<len1;j++)
+      for(j=i+1;j<len1;j++)
         {
             if(from[i]==from[j])
             {
@@ -62,7 +57,7 @@ int main(int argc, const char * argv[]) {
             }
         }
     }
-
+    
     char c=getchar();
     
     checkIO();

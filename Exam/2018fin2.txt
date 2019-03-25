@@ -1,0 +1,99 @@
+35L 2018 Final 2
+12:14a
+12:56a
+
+Question 1
+
+#!/bin/bash
+
+echo "Before compressing, we run du -sh (summary and human readable)"
+du -sh
+
+FILES=$(find . -mindepth 1 -maxdepth 1 -type f | sed "s/\.\///g")
+
+for i in $FILES; do
+    if [[ $i =~ [^\.]{1,}\.[^\.]* ]]; then
+	#echo $i
+	echo "Extension of $i is ${i##*.}"
+    fi
+    if [[ ${i##*.} == "gz" ]]; then #how to get the extension
+	echo "untarring $i"
+	tar -xzvf $i
+    fi
+done
+
+echo "After compressing, we run du -sh again (summary and human readable)"
+du -sh
+
+--------------
+Question 2
+C) there is no string in C
+--------------
+Question 3
+
+When we use malloc but don't free mem, there will be a leak.
+
+#include <stdlib.h>
+#include <stdio.h>
+int main() {
+    int *ptr = (int*)malloc(100 * sizeof(int));
+    //don't free
+    return 0; //leak!
+}
+
+We can use Valgrind --leak-check to double check our program, and
+make sure there is not any leak.
+-------------
+Question 4
+
+echo abc | tr 'abc' 'bcd'
+-------------
+Question 5
+Can marcos be used inside a makefile? If yes, give an example.
+We can do something like
+CC = gcc
+CFLAGS = $(OPTIMIZE) -g3 -Wall -Wextra -mar...
+Therefore, we can use maros in Makefile.
+------------
+Question 6
+Case 1) Different serveres will probably have different library files on the server. To avoid these issues, use static linking, will not cause dependency issues, and distribution is pretty easy, but will be very large and difficult when changing the code. since need to recompile and link all components
+
+Case 2) shared lib. save mem, same lib, no dependency issues.
+
+Case 3)
+drawback of dynamic linking: difficult to make sure the server always have the correct version of library. If it doesn't , it is hard for users to fix it.
+
+Optimum way to reuse the executable: can do dynamic loading if the required lib is very large. Whenever the user needs it, the program calls funcs ssuch as dlopen() and load the reequired functions from the shared libs. we save memory by doing this, and speed up the program since we don't need to load lots of stuff that we don't even need!!
+----------
+Ques 7
+When you want to merge, there are inconsistencies between two branches.
+
+From https://help.github.com/en/articles/resolving-a-merge-conflict-using-the-command-line,
+
+You can resolve merge conflicts using the command line and a text editor.
+Merge conflicts occur when competing changes are made to the same line of a file, or when one person edits a file and another person deletes the same file.
+
+git status # generate a list of the files affected by the merge conflict.
+
+git add .
+
+git commit -m "Resolved merge conflict by incorporating both suggesions."
+(look more about merge!!)
+----------
+Ques 8
+a
+since core dump won't give you exact line numbers of the bug.
+---------
+Ques 9
+
+???
+
+--------
+Ques 10
+
+efficient way to match certain patterns. Can validate emails, search for html tags..
+
+a.
+abc@def.com # validate emails
+www.abcde.com #validate web addr
+12345.12343 #floating point numbers

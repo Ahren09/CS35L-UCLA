@@ -1,0 +1,98 @@
+1. git init
+
+	Initialize a repository
+	
+2. git clone:
+
+	clones another repository, copies all the commit/tag information of the
+	current active branch of the cloned repository 
+	
+	syntax: git clone path_to_repository
+	
+	git clone /root/35L/git
+
+3. git status:
+
+	showing the status of the files under the current directory
+	
+4. git add:
+
+	change untracked files/modified files to staged state since last checkout
+	
+	syntax: git add file1 file2 file3 ...
+	
+	e.g. 
+	git add Makefile
+	git add *.c 
+	
+5. git commit:
+
+	commit all the staged file to reflect the new status 
+	
+	syntax:
+	
+	git commit -m "description comments for the commit"
+
+	e.g.
+	
+	git commit -m "adding Makefile"
+	
+
+6. git log:
+
+	Show information for each commit 
+
+7. git branch
+
+	A. List all the branch in the current repository
+	syntax: git branch
+	
+	B. Fork a new branch from the current commit
+	syntax: git branch branch_name
+	
+	e.g. 
+	git branch bug-fix-Makefile
+	
+8. git tag
+
+	A. List all the tags in the current repository
+	syntax: git tag
+	
+	B. Assign a new tag to the commit
+	syntax: git tagname commitID
+	
+	e.g: git tag v1.0 322557d3154307c70d3f4681f1298d4f4cbc203d
+	
+9. git checkout 
+
+	A. restore to a previous commit
+	syntax: git checkout commitID/tagID
+	e.g. git checkout 322557d3154307c70d3f4681f1298d4f4cbc203d
+	
+	B. switch to another branch
+	syntax: git checkout branch_name
+	e.g. git checkout bug-fix-Makefile
+	
+	C. Discard changes since last commit for specified file
+	syntax: git checkout -- file1 file2 ...
+	e.g. git checkout -- *.change
+	
+	D. Discard changes since last commit for the whole repository
+	syntax: git checkout . 
+	
+10. git merge
+
+	merge the branch to the current branch
+	
+	syntax: git merge branch_name
+	e.g. git merge bug-fix-Makefile
+	
+11. git diff 
+
+	A. show the difference since last commit
+	syntax: git diff
+	
+	B. show the difference between two commits
+	syntax: git diff tagID1/commitID1 tagID2/commitID2
+	e.g. 
+	git diff v1.0 d23c944..... 
